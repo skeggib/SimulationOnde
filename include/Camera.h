@@ -8,7 +8,8 @@ class Camera
 private:
 
     Point _position;
-    double _theta, _phi;
+    double _theta = 0;
+    double _phi = 0;
 
 public:
 

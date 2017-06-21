@@ -12,6 +12,12 @@ void World::render(Camera camera)
               0.0,0.0,0.0, 0.0,0.0,1.0);
 
     glPushMatrix();
+
+    Point cam_pos = camera.getPosition();
+    glTranslated(cam_pos.x, cam_pos.y, cam_pos.z);
+    glRotated(camera.getPhi(), 0, 0, 1);
+    glTranslated(-cam_pos.x, -cam_pos.y, -cam_pos.z);
+
     // Render the coordinates system
     glBegin(GL_LINES);
     {
@@ -26,11 +32,12 @@ void World::render(Camera camera)
         glVertex3i(0, 0, 1);
     }
     glEnd();
-    glPopMatrix();
 
     for (unsigned int i = 0; i < _forms.size(); i++)
         if (_forms[i])
             _forms[i]->render();
+
+    glPopMatrix();
 }
 
 void World::update(double delta_t)

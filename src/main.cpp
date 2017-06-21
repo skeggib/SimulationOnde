@@ -200,6 +200,7 @@ int main(int argc, char* args[])
                     y *= -1;
                     std::cout << "MOVE (" << x << "," << y << ")" << std::endl;
                     SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+                    camera.rotateH(x);
                     break;
                 default:
                     break;
