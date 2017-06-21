@@ -243,7 +243,7 @@ int main(int argc, char* args[])
                     break;
                 case SDL_MOUSEMOTION:
                     SDL_GetMouseState( &x, &y );
-                    cout << "MOVE (" << x << "," << y << ")" << endl;
+                    std::cout << "MOVE (" << x << "," << y << ")" << std::endl;
                     break;
                 default:
                     break;
@@ -256,23 +256,23 @@ int main(int argc, char* args[])
             }
             if(statEv[SDL_SCANCODE_LEFT])
             {
-                cout << "LEFT" << endl;
+                std::cout << "LEFT" << std::endl;
             }
             if(statEv[SDL_SCANCODE_RIGHT])
             {
-                cout << "RIGHT" << endl;
+                std::cout << "RIGHT" << std::endl;
             }
             if(statEv[SDL_SCANCODE_UP])
             {
-                cout << "UP" << endl;
+                std::cout << "UP" << std::endl;
             }
             if(statEv[SDL_SCANCODE_DOWN])
             {
-                cout << "DOWN" << endl;
+                std::cout << "DOWN" << std::endl;
             }
             if(statEv[SDL_SCANCODE_SPACE])
             {
-                cout << "EVENT" << endl;
+                std::cout << "EVENT" << std::endl;
             }
 
             // Update the scene
