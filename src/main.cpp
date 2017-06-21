@@ -218,6 +218,8 @@ int main(int argc, char* args[])
         bool quit = false;
         Uint32 current_time, previous_time, elapsed_time;
 
+        int x = 0, y = 0;
+
         // Event handler
         SDL_Event event;
 
@@ -227,39 +229,50 @@ int main(int argc, char* args[])
         // Get first "current time"
         previous_time = SDL_GetTicks();
         // While application is running
+
+        Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
         {
             // Handle events on queue
             while(SDL_PollEvent(&event) != 0)
             {
-                int x = 0, y = 0;
-                SDL_Keycode key_pressed = event.key.keysym.sym;
-
                 switch(event.type)
                 {
-                // User requests quit
                 case SDL_QUIT:
                     quit = true;
                     break;
-                case SDL_KEYDOWN:
-                    // Handle key pressed with current mouse position
+                case SDL_MOUSEMOTION:
                     SDL_GetMouseState( &x, &y );
-
-                    switch(key_pressed)
-                    {
-                    // Quit the program when 'q' or Escape keys are pressed
-                    case SDLK_q:
-                    case SDLK_ESCAPE:
-                        quit = true;
-                        break;
-
-                    default:
-                        break;
-                    }
+                    cout << "MOVE (" << x << "," << y << ")" << endl;
                     break;
                 default:
                     break;
                 }
+            }
+
+            if(statEv[SDL_SCANCODE_ESCAPE])
+            {
+                quit = true;
+            }
+            if(statEv[SDL_SCANCODE_LEFT])
+            {
+                cout << "LEFT" << endl;
+            }
+            if(statEv[SDL_SCANCODE_RIGHT])
+            {
+                cout << "RIGHT" << endl;
+            }
+            if(statEv[SDL_SCANCODE_UP])
+            {
+                cout << "UP" << endl;
+            }
+            if(statEv[SDL_SCANCODE_DOWN])
+            {
+                cout << "DOWN" << endl;
+            }
+            if(statEv[SDL_SCANCODE_SPACE])
+            {
+                cout << "EVENT" << endl;
             }
 
             // Update the scene
