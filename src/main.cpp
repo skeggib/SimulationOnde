@@ -164,6 +164,8 @@ int main(int argc, char* args[])
         bool quit = false;
         Uint32 current_time, previous_time, elapsed_time;
 
+        int x = 0, y = 0;
+
         // Event handler
         SDL_Event event;
 
@@ -176,39 +178,65 @@ int main(int argc, char* args[])
         // Get first "current time"
         previous_time = SDL_GetTicks();
         // While application is running
+
+        // Center the cursor
+        SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+
+        Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
         {
             // Handle events on queue
             while(SDL_PollEvent(&event) != 0)
             {
-                int x = 0, y = 0;
-                SDL_Keycode key_pressed = event.key.keysym.sym;
-
                 switch(event.type)
                 {
-                // User requests quit
                 case SDL_QUIT:
                     quit = true;
                     break;
-                case SDL_KEYDOWN:
-                    // Handle key pressed with current mouse position
+                case SDL_MOUSEMOTION:
                     SDL_GetMouseState( &x, &y );
-
-                    switch(key_pressed)
-                    {
-                    // Quit the program when 'q' or Escape keys are pressed
-                    case SDLK_q:
-                    case SDLK_ESCAPE:
-                        quit = true;
-                        break;
-
-                    default:
-                        break;
-                    }
+                    x -= SCREEN_WIDTH / 2;
+                    y -= SCREEN_HEIGHT / 2;
+                    y *= -1;
+                    std::cout << "MOVE (" << x << "," << y << ")" << std::endl;
+                    SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                     break;
                 default:
                     break;
                 }
+            }
+
+            if(statEv[SDL_SCANCODE_ESCAPE])
+            {
+                quit = true;
+            }
+            if(statEv[SDL_SCANCODE_LEFT])
+            {
+                std::cout << "LEFT" << std::endl;
+            }
+            if(statEv[SDL_SCANCODE_RIGHT])
+            {
+                std::cout << "RIGHT" << std::endl;
+            }
+            if(statEv[SDL_SCANCODE_UP])
+            {
+                std::cout << "UP" << std::endl;
+            }
+            if(statEv[SDL_SCANCODE_DOWN])
+            {
+                std::cout << "DOWN" << std::endl;
+            }
+            if(statEv[SDL_SCANCODE_SPACE])
+            {
+                std::cout << "SPACE" << std::endl;
+            }
+            if(statEv[SDL_SCANCODE_LSHIFT])
+            {
+                std::cout << "LSHIFT" << std::endl;
+            }
+            if(statEv[SDL_SCANCODE_RETURN])
+            {
+                std::cout << "EVENT" << std::endl;
             }
 
             // Update the scene
