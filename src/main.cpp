@@ -7,6 +7,7 @@
 
 #include "Camera.h"
 #include "World.h"
+#include "WaterMesh.h"
 
 /***************************************************************************/
 /* Constants and functions declarations                                    */
@@ -170,6 +171,7 @@ int main(int argc, char* args[])
         Camera camera(Point(5.0, 5.0, 5.0));
 
         World world;
+        world.add(new WaterMesh(Point(0, 0, 0), 4, 10));
 
         // Get first "current time"
         previous_time = SDL_GetTicks();

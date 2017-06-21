@@ -13,3 +13,5 @@ class Point : public Coordinates
         //void translate(const Vector &);
         //static double distance(Point p1, Point p2);
 };
+
+Point operator+(const Point &p, const Vector &v);

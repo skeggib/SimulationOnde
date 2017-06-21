@@ -3,6 +3,8 @@
 #include <cmath>
 
 #include "Coordinates.h"
+
+class Vector;
 #include "Point.h"
 
 class Vector : public Coordinates

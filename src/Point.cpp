@@ -16,3 +16,8 @@ Point::Point(double x, double y, double z)
 
     return vect.norm();
 }*/
+
+Point operator+(const Point &p, const Vector &v)
+{
+    return Point(p.x + v.x, p.y + v.y, p.z + v.z);
+}
