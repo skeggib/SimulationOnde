@@ -5,7 +5,8 @@
 #include <SDL2/SDL_opengl.h>
 #include <GL/GLU.h>
 
-#include "Form.h"
+#include "Camera.h"
+#include "World.h"
 
 /***************************************************************************/
 /* Constants and functions declarations                                    */
@@ -26,12 +27,6 @@ bool init(SDL_Window** window, SDL_GLContext* context);
 
 // Initializes matrices and clear color
 bool initGL();
-
-// Updating forms for animation
-void update(Form* formlist[MAX_FORMS_NUMBER], double delta_t);
-
-// Renders scene to the screen
-const void render(Form* formlist[MAX_FORMS_NUMBER], const Point &cam_pos);
 
 // Frees media and shuts down SDL
 void close(SDL_Window** window);
@@ -134,56 +129,6 @@ bool initGL()
     return success;
 }
 
-void update(Form* formlist[MAX_FORMS_NUMBER], double delta_t)
-{
-    // Update the list of forms
-    unsigned short i = 0;
-    while(formlist[i] != NULL)
-    {
-        formlist[i]->update(delta_t);
-        i++;
-    }
-}
-
-const void render(Form* formlist[MAX_FORMS_NUMBER], const Point &cam_pos)
-{
-    // Clear color buffer and Z-Buffer
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // Initialize Modelview Matrix
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    // Set the camera position and parameters
-    gluLookAt(cam_pos.x,cam_pos.y,cam_pos.z, 0.0,0.0,0.0, 0.0,0.0,1.0);
-
-    // X, Y and Z axis
-    glPushMatrix(); // Preserve the camera viewing point for further forms
-    // Render the coordinates system
-    glBegin(GL_LINES);
-    {
-        glColor3f(1.0f, 0.0f, 0.0f);
-        glVertex3i(0, 0, 0);
-        glVertex3i(1, 0, 0);
-        glColor3f(0.0f, 1.0f, 0.0f);
-        glVertex3i(0, 0, 0);
-        glVertex3i(0, 1, 0);
-        glColor3f(0.0f, 0.0f, 1.0f);
-        glVertex3i(0, 0, 0);
-        glVertex3i(0, 0, 1);
-    }
-    glEnd();
-    glPopMatrix(); // Restore the camera viewing point for next object
-
-    // Render the list of forms
-    unsigned short i = 0;
-    while(formlist[i] != NULL)
-    {
-        formlist[i]->render();
-        i++;
-    }
-}
-
 void close(SDL_Window** window)
 {
     //Destroy window
@@ -222,7 +167,9 @@ int main(int argc, char* args[])
         SDL_Event event;
 
         // Camera position
-        Point camera_position(5.0, 5.0, 5.0);
+        Camera camera(Point(5.0, 5.0, 5.0));
+
+        World world;
 
         // Get first "current time"
         previous_time = SDL_GetTicks();
@@ -268,11 +215,11 @@ int main(int argc, char* args[])
             if (elapsed_time > ANIM_DELAY)
             {
                 previous_time = current_time;
-                //update(forms_list, 1e-3 * elapsed_time); // International system units : seconds
+                world.update(1e-3 * elapsed_time); // International system units : seconds
             }
 
             // Render the scene
-            //render(forms_list, camera_position);
+            world.render(camera);
 
             // Update window screen
             SDL_GL_SwapWindow(gWindow);
