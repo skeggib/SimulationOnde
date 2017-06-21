@@ -22,11 +22,17 @@ void Triangle::render()
 
     glBegin(GL_TRIANGLES);
     {
-        glColor3f(1,0,0);
+		Vector scalar = _v1 ^ _v2;
+		Vector sun(-1, 1, -1);
+		double dot = scalar * sun;
+		double angle = abs(dot / (scalar.norm() * sun.norm()));
+		double min = 0.3;
+		double max = 0.9;
+		double color = angle * (max - min) + min;
+
+        glColor3f(0,0.1,color);
         glVertex3d(_origin.x, _origin.y, _origin.z);
-        glColor3f(0,1,0);
         glVertex3d(_origin.x + _v1.x, _origin.y + _v1.y, _origin.z + _v1.z);
-        glColor3f(0,0,1);
         glVertex3d(_origin.x + _v2.x, _origin.y + _v2.y, _origin.z + _v2.z);
     }
     glEnd();

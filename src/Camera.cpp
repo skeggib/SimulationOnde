@@ -1,8 +1,10 @@
 #include "Camera.h"
 
-Camera::Camera(Point position)
+Camera::Camera(Point position, double phi, double theta)
 {
     _position = position;
+    _phi = phi;
+    _theta = theta;
 }
 
 Point Camera::getPosition()
@@ -28,9 +30,9 @@ void Camera::rotateH(double angle)
         double delta = -_phi;
         _phi = 360 - delta;
     }
-    else if (_phi >= 360)
+    else if (_phi > 360)
     {
-        double delta = 360 - _phi;
+        double delta = _phi - 360;
         _phi = 0 + delta;
     }
 }
@@ -38,14 +40,12 @@ void Camera::rotateH(double angle)
 void Camera::rotateV(double angle)
 {
     _theta += angle;
-    if (_theta < 0)
+    if (_theta < -89)
     {
-        double delta = -_theta;
-        _theta = 360 - delta;
+        _theta = -89;
     }
-    else if (_theta >= 360)
+    else if (_theta > 89)
     {
-        double delta = 360 - _theta;
-        _theta = 0 + delta;
+        _theta = 89;
     }
 }

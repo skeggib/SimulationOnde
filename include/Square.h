@@ -8,7 +8,9 @@ class Square : public Form
 {
 private:
 
-    Triangle t1, t2;
+    Triangle _t1, _t2;
+    double _i1, _i2, _i3, _i4;
+    double _size;
 
 public:
 
@@ -17,4 +19,9 @@ public:
 
     void render();
     void update(double delta_t);
+
+    void setIntensity1(double intensity);
+    void setIntensity2(double intensity);
+    void setIntensity3(double intensity);
+    void setIntensity4(double intensity);
 };

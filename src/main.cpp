@@ -1,8 +1,13 @@
 // Using SDL, SDL OpenGL and standard IO
 #include <iostream>
 #include <cmath>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
+
+#include <windows.h>
+
+#define SDL_MAIN_HANDLED
+
+#include <SDL.h>
+#include <GL/gl.h>
 #include <GL/GLU.h>
 
 #include "Camera.h"
@@ -13,8 +18,8 @@
 /* Constants and functions declarations                                    */
 /***************************************************************************/
 // Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 1000;
+const int SCREEN_HEIGHT = 700;
 
 // Max number of forms : static allocation
 const int MAX_FORMS_NUMBER = 10;
@@ -54,7 +59,7 @@ bool init(SDL_Window** window, SDL_GLContext* context)
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
         // Create window
-        *window = SDL_CreateWindow( "TP intro OpenGL / SDL 2", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+        *window = SDL_CreateWindow( "Simulation d'onde", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
         if( *window == NULL )
         {
             std::cout << "Window could not be created! SDL Error: " << SDL_GetError() << std::endl;
@@ -164,16 +169,28 @@ int main(int argc, char* args[])
         bool quit = false;
         Uint32 current_time, previous_time, elapsed_time;
 
-        int x = 0, y = 0;
-
         // Event handler
         SDL_Event event;
 
         // Camera position
-        Camera camera(Point(5.0, 5.0, 5.0));
+        Camera camera(Point(10, 10, 10));
 
         World world;
-        world.add(new WaterMesh(Point(0, 0, 0), 4, 10));
+
+        WaterMesh mesh(Point(0, 0, 0), 10, 100);
+		for (double x = 0; x < mesh.count(); x++)
+		{
+			for (double y = 0; y < mesh.count(); y++)
+			{
+				double x2 = x - mesh.count() / 2;
+				double y2 = y - mesh.count() / 2;
+				double dist = sqrt(x2*x2 + y2*y2);
+				double intensity = cos(dist / (double)mesh.count() * 2 * M_PI * 5) / 3;
+				mesh.setIntensity(x, y, intensity);
+			}
+		}
+
+        world.add(&mesh);
 
         // Get first "current time"
         previous_time = SDL_GetTicks();
@@ -181,6 +198,7 @@ int main(int argc, char* args[])
 
         // Center the cursor
         SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+		int mouse_dx = 0, mouse_dy = 0;
 
         Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
@@ -194,13 +212,12 @@ int main(int argc, char* args[])
                     quit = true;
                     break;
                 case SDL_MOUSEMOTION:
-                    SDL_GetMouseState( &x, &y );
-                    x -= SCREEN_WIDTH / 2;
-                    y -= SCREEN_HEIGHT / 2;
-                    y *= -1;
-                    std::cout << "MOVE (" << x << "," << y << ")" << std::endl;
+                    SDL_GetMouseState( &mouse_dx, &mouse_dy );
+                    mouse_dx -= SCREEN_WIDTH / 2;
+                    mouse_dy -= SCREEN_HEIGHT / 2;
                     SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-                    camera.rotateH(x);
+                    camera.rotateH((double)mouse_dx / 3.0);
+                    camera.rotateV((double)mouse_dy / 3.0);
                     break;
                 default:
                     break;

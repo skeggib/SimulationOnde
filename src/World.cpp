@@ -1,5 +1,7 @@
 #include "World.h"
 
+#include <iostream>
+
 World::World() { }
 
 void World::render(Camera camera)
@@ -8,13 +10,10 @@ void World::render(Camera camera)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    gluLookAt(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z,
-              0.0,0.0,0.0, 0.0,0.0,1.0);
-
-    glPushMatrix();
+    gluLookAt(0, 0, 0, -1, 0, 0, 0, 0, 1);
 
     Point cam_pos = camera.getPosition();
-    glTranslated(cam_pos.x, cam_pos.y, cam_pos.z);
+    glRotated(camera.getTheta(), 0, 1, 0);
     glRotated(camera.getPhi(), 0, 0, 1);
     glTranslated(-cam_pos.x, -cam_pos.y, -cam_pos.z);
 
@@ -36,8 +35,6 @@ void World::render(Camera camera)
     for (unsigned int i = 0; i < _forms.size(); i++)
         if (_forms[i])
             _forms[i]->render();
-
-    glPopMatrix();
 }
 
 void World::update(double delta_t)

@@ -10,6 +10,7 @@ class WaterMesh : public Form
 private:
 
     std::vector< std::vector<Square> > _squares;
+    int _splits;
 
 public:
 
@@ -17,4 +18,12 @@ public:
 
     void render();
     void update(double delta_t);
+
+    /**
+     * @brief Counts the number of points in one direction (axis)
+     * @return The number of points in one direction (axis)
+     */
+    unsigned int count();
+
+    void setIntensity(int x, int y, double intensity);
 };

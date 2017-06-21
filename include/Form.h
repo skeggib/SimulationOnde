@@ -1,5 +1,8 @@
 #pragma once
 
+#include <windows.h>
+
+#include <GL/gl.h>
 #include <GL/GLU.h>
 
 #include "Color.h"
