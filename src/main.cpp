@@ -230,6 +230,9 @@ int main(int argc, char* args[])
         previous_time = SDL_GetTicks();
         // While application is running
 
+        // Center the cursor
+        SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+
         Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
         {
@@ -243,7 +246,11 @@ int main(int argc, char* args[])
                     break;
                 case SDL_MOUSEMOTION:
                     SDL_GetMouseState( &x, &y );
+                    x -= SCREEN_WIDTH / 2;
+                    y -= SCREEN_HEIGHT / 2;
+                    y *= -1;
                     std::cout << "MOVE (" << x << "," << y << ")" << std::endl;
+                    SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
                     break;
                 default:
                     break;
