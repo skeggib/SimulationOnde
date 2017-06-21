@@ -279,6 +279,14 @@ int main(int argc, char* args[])
             }
             if(statEv[SDL_SCANCODE_SPACE])
             {
+                std::cout << "SPACE" << std::endl;
+            }
+            if(statEv[SDL_SCANCODE_LSHIFT])
+            {
+                std::cout << "LSHIFT" << std::endl;
+            }
+            if(statEv[SDL_SCANCODE_RETURN])
+            {
                 std::cout << "EVENT" << std::endl;
             }
 
