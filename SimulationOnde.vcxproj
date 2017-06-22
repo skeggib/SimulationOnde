@@ -140,6 +140,7 @@
     <ClCompile Include="src\Coordinates.cpp" />
     <ClCompile Include="src\Form.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Onde.cpp" />
     <ClCompile Include="src\Point.cpp" />
     <ClCompile Include="src\Square.cpp" />
     <ClCompile Include="src\Triangle.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="include\Color.h" />
     <ClInclude Include="include\Coordinates.h" />
     <ClInclude Include="include\Form.h" />
+    <ClInclude Include="include\Onde.h" />
     <ClInclude Include="include\Point.h" />
     <ClInclude Include="include\Square.h" />
     <ClInclude Include="include\Triangle.h" />

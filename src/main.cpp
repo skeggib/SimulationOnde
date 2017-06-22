@@ -173,23 +173,12 @@ int main(int argc, char* args[])
         SDL_Event event;
 
         // Camera position
-        Camera camera(Point(10, 10, 10));
+        Camera camera(Point(5, 5, 5));
 
         World world;
 
-        WaterMesh mesh(Point(0, 0, 0), 10, 100);
-		for (double x = 0; x < mesh.count(); x++)
-		{
-			for (double y = 0; y < mesh.count(); y++)
-			{
-				double x2 = x - mesh.count() / 2;
-				double y2 = y - mesh.count() / 2;
-				double dist = sqrt(x2*x2 + y2*y2);
-				double intensity = cos(dist / (double)mesh.count() * 2 * M_PI * 5) / 3;
-				mesh.setIntensity(x, y, intensity);
-			}
-		}
-
+        Wave wave(0.5, 0.3, 0.3);
+        WaterMesh mesh(Point(0, 0, 0), 5, 100, wave);
         world.add(&mesh);
 
         // Get first "current time"

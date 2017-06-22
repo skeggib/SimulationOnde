@@ -1,10 +1,13 @@
 #include "WaterMesh.h"
 
-WaterMesh::WaterMesh(Point origin, double size, int splits) :
-_squares(splits, std::vector<Square>(splits, Square()))
+WaterMesh::WaterMesh(Point origin, double size, int splits, Wave wave) :
+    _size(size),
+    _splits(splits),
+    _squares(splits, std::vector<Square>(splits, Square())),
+    _elapsedTime(0)
 {
     getAnimation().setPos(origin);
-    _splits = splits;
+    _wave = wave;
 
     for (unsigned int i = 0; i < _squares.size(); i++)
         for (unsigned int j = 0; j < _squares[i].size(); j++)
@@ -31,6 +34,22 @@ void WaterMesh::update(double delta_t)
     for (unsigned int i = 0; i < _squares.size(); i++)
         for (unsigned int j = 0; j < _squares[i].size(); j++)
                 _squares[i][j].update(delta_t);
+
+    _elapsedTime += delta_t;
+
+    for (double x = 0; x < count(); x++)
+    {
+        for (double y = 0; y < count(); y++)
+        {
+            double x2 = x - count() / 2;
+            double y2 = y - count() / 2;
+            x2 *= _size / _splits;
+            y2 *= _size / _splits;
+            double r = sqrt(x2*x2 + y2*y2);
+            double intensity = _wave.getIntensity(r, _elapsedTime);
+            setIntensity(x, y, intensity);
+        }
+    }
 }
 
 unsigned int WaterMesh::count()
