@@ -25,7 +25,9 @@ void Triangle::render()
 		Vector scalar = _v1 ^ _v2;
 		Vector sun(-1, 1, -1);
 		double dot = scalar * sun;
-		double angle = abs(dot / (scalar.norm() * sun.norm()));
+		double scalar_norm = scalar.norm();
+		double sun_norm = sun.norm();
+		double angle = -dot / (scalar_norm * sun_norm);
 		double min = 0.3;
 		double max = 0.9;
 		double color = angle * (max - min) + min;

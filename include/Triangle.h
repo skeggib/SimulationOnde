@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 #include "Form.h"
 #include "Point.h"
 #include "Vector.h"
