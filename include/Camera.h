@@ -8,12 +8,12 @@ class Camera
 private:
 
     Point _position;
-    double _phi = 0;
-    double _theta = 0;
+    double _phi;
+    double _theta;
 
 public:
 
-    Camera(Point position = Point(5,5,5), double phi = 315, double theta = 35);
+    Camera(Point position = Point(0,0,0), double phi = 0, double theta = 0);
 
     Point getPosition();
     double getPhi();

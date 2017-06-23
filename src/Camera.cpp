@@ -24,28 +24,28 @@ double Camera::getTheta()
 
 void Camera::rotateH(double angle)
 {
-    _phi += angle;
-    if (_phi < 0)
+    _theta += angle;
+    if (_theta < 0)
     {
-        double delta = -_phi;
-        _phi = 360 - delta;
+        double delta = -_theta;
+        _theta = 360 - delta;
     }
-    else if (_phi > 360)
+    else if (_theta > 360)
     {
-        double delta = _phi - 360;
-        _phi = 0 + delta;
+        double delta = _theta - 360;
+        _theta = 0 + delta;
     }
 }
 
 void Camera::rotateV(double angle)
 {
-    _theta += angle;
-    if (_theta < -89)
+    _phi += angle;
+    if (_phi < -89)
     {
-        _theta = -89;
+        _phi = -89;
     }
-    else if (_theta > 89)
+    else if (_phi > 89)
     {
-        _theta = 89;
+        _phi = 89;
     }
 }

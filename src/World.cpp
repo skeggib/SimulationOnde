@@ -13,8 +13,8 @@ void World::render(Camera camera)
     gluLookAt(0, 0, 0, -1, 0, 0, 0, 0, 1);
 
     Point cam_pos = camera.getPosition();
-    glRotated(camera.getTheta(), 0, 1, 0);
-    glRotated(camera.getPhi(), 0, 0, 1);
+    glRotated(camera.getPhi(), 0, 1, 0);
+    glRotated(camera.getTheta(), 0, 0, 1);
     glTranslated(-cam_pos.x, -cam_pos.y, -cam_pos.z);
 
     // Render the coordinates system
