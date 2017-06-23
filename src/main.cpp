@@ -173,14 +173,14 @@ int main(int argc, char* args[])
         SDL_Event event;
 
         // Camera position
-        Camera camera(Point(5, 5, 5), 0, 0);
+        Camera camera(Point(5, 5, 5));
         camera.rotateH(-45);
         camera.rotateV(35);
 
         World world;
 
-        Wave wave(0.5, 0.1, 0.3);
-        WaterMesh mesh(Point(0, 0, 0), 5, 100, wave);
+        Wave wave(1, 0.7, 2, Point2D(1, -1));
+        WaterMesh mesh(Point(0, 0, 0), 20, 80, wave);
         world.add(&mesh);
 
         // Get first "current time"

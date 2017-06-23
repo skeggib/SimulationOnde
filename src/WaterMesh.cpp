@@ -45,8 +45,7 @@ void WaterMesh::update(double delta_t)
             double y2 = y - count() / 2;
             x2 *= _size / _splits;
             y2 *= _size / _splits;
-            double r = sqrt(x2*x2 + y2*y2);
-            double intensity = _wave.getIntensity(r, _elapsedTime);
+            double intensity = _wave.getIntensity(Point2D(x2, y2), _elapsedTime);
             setIntensity(x, y, intensity);
         }
     }
