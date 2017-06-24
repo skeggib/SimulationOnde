@@ -37,7 +37,7 @@ double Wave::getIntensity(Vector2 p, double t)
     Vector2 dist = p - _source;
     double r = dist.norm();
     double b = 0.3;
-	double l = _f / _c;
+	double l = _c / _f;
 
 	t -= _phaseChange;
 

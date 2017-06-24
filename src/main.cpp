@@ -191,15 +191,19 @@ int main(int argc, char* args[])
         WaterMesh mesh(Vector3(0, 0, 0), 10, 100);
 
 		double a = 1;
-		double f = 1;
+		double f = 0.5;
 		double c = 1;
-		std::vector<int> numbers = { 0, 1, 2 };
+		std::vector<int> numbers = { 0 };
 
 		mesh.addWave(new Wave(a, f, c, Vector2(0, 0), 0, numbers));
+
+		// First reflexion
 		mesh.addWave(new Wave(a, f, c, Vector2(10, 0), 0, numbers));
 		mesh.addWave(new Wave(a, f, c, Vector2(0, 10), 0, numbers));
 		mesh.addWave(new Wave(a, f, c, Vector2(-10, 0), 0, numbers));
 		mesh.addWave(new Wave(a, f, c, Vector2(0, -10), 0, numbers));
+
+		// Second reflexion
 		mesh.addWave(new Wave(a, f, c, Vector2(20, 0), 0, numbers));
 		mesh.addWave(new Wave(a, f, c, Vector2(0, 20), 0, numbers));
 		mesh.addWave(new Wave(a, f, c, Vector2(-20, 0), 0, numbers));
