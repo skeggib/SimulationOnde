@@ -191,7 +191,7 @@ int main(int argc, char* args[])
         Wave wave1(0.4, 1, 1, Vector2(-1, 0));
 		Wave wave2(0.4, 1, 1, Vector2(1, 0));
 
-        WaterMesh mesh(Vector3(0, 0, 0), 10, 80);
+        WaterMesh mesh(Vector3(0, 0, 0), 10, 70);
 		mesh.addWave(&wave1);
 		mesh.addWave(&wave2);
 
@@ -228,52 +228,6 @@ int main(int argc, char* args[])
                 }
             }
 
-            if(statEv[SDL_SCANCODE_ESCAPE])
-            {
-                quit = true;
-            }
-            if(statEv[SDL_SCANCODE_LEFT])
-            {
-                std::cout << "LEFT" << std::endl;
-                camera.move(0,-SPEED,0);
-            }
-            if(statEv[SDL_SCANCODE_RIGHT])
-            {
-                std::cout << "RIGHT" << std::endl;
-                camera.move(0,SPEED,0);
-            }
-            if(statEv[SDL_SCANCODE_UP])
-            {
-                std::cout << "FORWARD" << std::endl;
-                camera.move(-SPEED,0,0);
-            }
-            if(statEv[SDL_SCANCODE_DOWN])
-            {
-                std::cout << "BACKWARD" << std::endl;
-                camera.move(SPEED,0,0);
-            }
-            if(statEv[SDL_SCANCODE_SPACE])
-            {
-                std::cout << "UP" << std::endl;
-                camera.move(0,0,SPEED);
-            }
-            if(statEv[SDL_SCANCODE_LSHIFT])
-            {
-                std::cout << "DOWN" << std::endl;
-                camera.move(0,0,-SPEED);
-            }
-            if(statEv[SDL_SCANCODE_RETURN])
-            {
-                std::cout << "EVENT" << std::endl;
-            }
-            if(statEv[SDL_SCANCODE_R])
-            {
-                std::cout << "RESET" << std::endl;
-                camera.setPhi(phi);
-                camera.setTheta(theta);
-                camera.setPosition(origin);
-            }
-
             // Update the scene
             current_time = SDL_GetTicks(); // get the elapsed time from SDL initialization (ms)
             elapsed_time = current_time - previous_time;
@@ -282,6 +236,47 @@ int main(int argc, char* args[])
                 previous_time = current_time;
                 world.update(1e-3 * elapsed_time); // International system units : seconds
             }
+
+			double speed = SPEED * elapsed_time * 1e-3;
+
+			if (statEv[SDL_SCANCODE_ESCAPE])
+			{
+				quit = true;
+			}
+			if (statEv[SDL_SCANCODE_A])
+			{
+				camera.move(0, -SPEED, 0);
+			}
+			if (statEv[SDL_SCANCODE_D])
+			{
+				camera.move(0, SPEED, 0);
+			}
+			if (statEv[SDL_SCANCODE_W])
+			{
+				camera.move(-SPEED, 0, 0);
+			}
+			if (statEv[SDL_SCANCODE_S])
+			{
+				camera.move(SPEED, 0, 0);
+			}
+			if (statEv[SDL_SCANCODE_SPACE])
+			{
+				camera.move(0, 0, SPEED);
+			}
+			if (statEv[SDL_SCANCODE_LSHIFT])
+			{
+				camera.move(0, 0, -SPEED);
+			}
+			if (statEv[SDL_SCANCODE_RETURN])
+			{
+				std::cout << "EVENT" << std::endl;
+			}
+			if (statEv[SDL_SCANCODE_R])
+			{
+				camera.setPhi(phi);
+				camera.setTheta(theta);
+				camera.setPosition(origin);
+			}
 
             // Render the scene
             world.render(camera);

@@ -1,7 +1,7 @@
 #include "Triangle.h"
 
-const double Triangle::MinColor = 0.3;
-const double Triangle::MaxColor = 0.7;
+const double Triangle::MinColor = 0.5;
+const double Triangle::MaxColor = 0.9;
 
 Triangle::Triangle(Vector3 origin, Vector3 v1, Vector3 v2)
 {
