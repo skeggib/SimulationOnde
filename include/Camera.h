@@ -19,7 +19,12 @@ public:
     double getPhi();
     double getTheta();
 
+    void setPosition(Point position);
+    void setPhi(double phi);
+    void setTheta(double theta);
+
     void rotateH(double angle);
     void rotateV(double angle);
-    void move(Vector vec);
+    void move(double forward, double left, double up);
+    void reset(void);
 };

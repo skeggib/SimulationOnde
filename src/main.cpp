@@ -6,6 +6,8 @@
 
 #define SDL_MAIN_HANDLED
 
+#define SPEED 0.3
+
 #include <SDL2/SDL.h>
 #include <GL/gl.h>
 #include <GL/GLU.h>
@@ -165,6 +167,9 @@ int main(int argc, char* args[])
     }
     else
     {
+        // Hide cursor
+        SDL_ShowCursor(SDL_DISABLE);
+
         // Main loop flag
         bool quit = false;
         Uint32 current_time, previous_time, elapsed_time;
@@ -173,14 +178,18 @@ int main(int argc, char* args[])
         SDL_Event event;
 
         // Camera position
-        Camera camera(Point(5, 5, 5), 0, 0);
+        Point origine = Point(5, 5, 5);
+        Camera camera(origine, 0, 0);
         camera.rotateH(-45);
         camera.rotateV(35);
+
+        double phi = camera.getPhi();
+        double theta = camera.getTheta();
 
         World world;
 
         Wave wave(0.5, 0.1, 0.3);
-        WaterMesh mesh(Point(0, 0, 0), 5, 100, wave);
+        WaterMesh mesh(Point(0, 0, 0), 5, 2, wave);
         world.add(&mesh);
 
         // Get first "current time"
@@ -222,30 +231,43 @@ int main(int argc, char* args[])
             if(statEv[SDL_SCANCODE_LEFT])
             {
                 std::cout << "LEFT" << std::endl;
+                camera.move(0,-SPEED,0);
             }
             if(statEv[SDL_SCANCODE_RIGHT])
             {
                 std::cout << "RIGHT" << std::endl;
+                camera.move(0,SPEED,0);
             }
             if(statEv[SDL_SCANCODE_UP])
             {
-                std::cout << "UP" << std::endl;
+                std::cout << "FORWARD" << std::endl;
+                camera.move(-SPEED,0,0);
             }
             if(statEv[SDL_SCANCODE_DOWN])
             {
-                std::cout << "DOWN" << std::endl;
+                std::cout << "BACKWARD" << std::endl;
+                camera.move(SPEED,0,0);
             }
             if(statEv[SDL_SCANCODE_SPACE])
             {
-                std::cout << "SPACE" << std::endl;
+                std::cout << "UP" << std::endl;
+                camera.move(0,0,SPEED);
             }
             if(statEv[SDL_SCANCODE_LSHIFT])
             {
-                std::cout << "LSHIFT" << std::endl;
+                std::cout << "DOWN" << std::endl;
+                camera.move(0,0,-SPEED);
             }
             if(statEv[SDL_SCANCODE_RETURN])
             {
                 std::cout << "EVENT" << std::endl;
+            }
+            if(statEv[SDL_SCANCODE_R])
+            {
+                std::cout << "RESET" << std::endl;
+                camera.setPhi(phi);
+                camera.setTheta(theta);
+                camera.setPosition(origine);
             }
 
             // Update the scene
