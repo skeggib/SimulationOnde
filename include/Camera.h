@@ -1,5 +1,8 @@
 #pragma once
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 #include "Vector3.h"
 
 class Camera
@@ -18,7 +21,12 @@ public:
     double getPhi();
     double getTheta();
 
+    void setPosition(Vector3 position);
+    void setPhi(double phi);
+    void setTheta(double theta);
+
     void rotateH(double angle);
     void rotateV(double angle);
-    void move(Vector3 vec);
+    void move(double forward, double left, double up);
+    void reset(void);
 };
