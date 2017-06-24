@@ -70,20 +70,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)/include;C:\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\SDL2-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)/include;C:\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\SDL2-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)/include;C:\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\SDL2-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)/include;C:\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\SDL2-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -137,29 +137,27 @@
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Color.cpp" />
-    <ClCompile Include="src\Coordinates.cpp" />
     <ClCompile Include="src\Form.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Onde.cpp" />
-    <ClCompile Include="src\Point.cpp" />
     <ClCompile Include="src\Square.cpp" />
     <ClCompile Include="src\Triangle.cpp" />
-    <ClCompile Include="src\Vector.cpp" />
+    <ClCompile Include="src\Vector3.cpp" />
+    <ClCompile Include="src\Vector2.cpp" />
     <ClCompile Include="src\WaterMesh.cpp" />
+    <ClCompile Include="src\Wave.cpp" />
     <ClCompile Include="src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Animation.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Color.h" />
-    <ClInclude Include="include\Coordinates.h" />
     <ClInclude Include="include\Form.h" />
-    <ClInclude Include="include\Onde.h" />
-    <ClInclude Include="include\Point.h" />
     <ClInclude Include="include\Square.h" />
     <ClInclude Include="include\Triangle.h" />
-    <ClInclude Include="include\Vector.h" />
+    <ClInclude Include="include\Vector3.h" />
+    <ClInclude Include="include\Vector2.h" />
     <ClInclude Include="include\WaterMesh.h" />
+    <ClInclude Include="include\Wave.h" />
     <ClInclude Include="include\World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

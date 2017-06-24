@@ -173,19 +173,23 @@ int main(int argc, char* args[])
         SDL_Event event;
 
         // Camera position
-        Camera camera(Point(5, 5, 5));
+        Camera camera(Vector3(10, 10, 10));
         camera.rotateH(-45);
         camera.rotateV(35);
 
         World world;
 
-        Wave wave(1, 0.7, 2, Point2D(1, -1));
-        WaterMesh mesh(Point(0, 0, 0), 20, 80, wave);
+        Wave wave1(0.4, 1, 1, Vector2(-1, 0));
+		Wave wave2(0.4, 1, 1, Vector2(1, 0));
+
+        WaterMesh mesh(Vector3(0, 0, 0), 10, 80);
+		mesh.addWave(&wave1);
+		mesh.addWave(&wave2);
+
         world.add(&mesh);
 
         // Get first "current time"
         previous_time = SDL_GetTicks();
-        // While application is running
 
         // Center the cursor
         SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);

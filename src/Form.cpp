@@ -18,7 +18,7 @@ void Form::update(double delta_t)
 void Form::startRendering()
 {
     glPushMatrix();
-    Point org = _animation.getPos();
+    Vector3 org = _animation.getPos();
     glRotated(_animation.getPhi(), 0, 0, 1);
     glRotated(_animation.getTheta(), 1, 0, 0);
     glTranslated(org.x, org.y, org.z);

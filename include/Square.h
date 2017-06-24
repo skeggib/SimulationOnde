@@ -2,7 +2,6 @@
 
 #include "Form.h"
 #include "Triangle.h"
-#include "Point.h"
 
 class Square : public Form
 {
@@ -14,7 +13,7 @@ private:
 
 public:
 
-    Square(Point origin = Point(), double size = 1,
+    Square(Vector3 origin = Vector3(), double size = 1,
            double i1 = 0, double i2 = 0, double i3 = 0, double i4 = 0);
 
     void render();

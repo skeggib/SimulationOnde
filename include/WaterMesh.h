@@ -13,17 +13,20 @@ private:
     std::vector< std::vector<Square> > _squares;
     double _size;
     int _splits;
-    Wave _wave;
     double _elapsedTime;
+
+	std::vector<Wave*> _waves;
 
     void setIntensity(int x, int y, double intensity);
 
 public:
 
-    WaterMesh(Point origin, double size, int splits, Wave wave);
+    WaterMesh(Vector3 origin, double size, int splits);
 
     void render();
     void update(double delta_t);
+
+	void addWave(Wave* wave);
 
     /**
      * @brief Counts the number of points in one direction (axis)

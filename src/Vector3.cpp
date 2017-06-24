@@ -1,23 +1,21 @@
-#include "Vector.h"
+#include "Vector3.h"
 
-Vector::Vector(double x, double y, double z)
-: Coordinates(x, y, z) { }
-
-/*Vector::Vector(Point p1, Point p2)
+Vector3::Vector3(double x, double y, double z) :
+	x(x),
+	y(y),
+	z(z)
 {
-    x = p2.x - p1.x;
-    y = p2.y - p1.y;
-    z = p2.z - p1.z;
-}*/
 
-double Vector::norm()
+}
+
+double Vector3::norm()
 {
     return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
 }
 
-Vector Vector::integral(double delta_t)
+Vector3 Vector3::integral(double delta_t)
 {
-    Vector res;
+    Vector3 res;
 
     res.x = delta_t * x;
     res.y = delta_t * y;
@@ -26,16 +24,16 @@ Vector Vector::integral(double delta_t)
     return res;
 }
 
-void Vector::operator+=(const Vector &v)
+void Vector3::operator+=(const Vector3 &v)
 {
     x += v.x;
     y += v.y;
     z += v.z;
 }
 
-Vector operator+(const Vector &v1, const Vector &v2)
+Vector3 operator+(const Vector3 &v1, const Vector3 &v2)
 {
-    Vector res = v1;
+    Vector3 res = v1;
 
     res.x += v2.x;
     res.y += v2.y;
@@ -44,9 +42,9 @@ Vector operator+(const Vector &v1, const Vector &v2)
     return res;
 }
 
-Vector operator-(const Vector &v)
+Vector3 operator-(const Vector3 &v)
 {
-    Vector res;
+    Vector3 res;
 
     res.x = -v.x;
     res.y = -v.y;
@@ -55,14 +53,14 @@ Vector operator-(const Vector &v)
     return res;
 }
 
-Vector operator-(const Vector &v1, const Vector &v2)
+Vector3 operator-(const Vector3 &v1, const Vector3 &v2)
 {
     return -v2 + v1;
 }
 
-Vector operator*(const double &k, const Vector &v)
+Vector3 operator*(const double &k, const Vector3 &v)
 {
-    Vector res = v;
+    Vector3 res = v;
 
     res.x *= k;
     res.y *= k;
@@ -72,15 +70,15 @@ Vector operator*(const double &k, const Vector &v)
 }
 
 // Scalar product
-double operator*(const Vector &v1, const Vector &v2)
+double operator*(const Vector3 &v1, const Vector3 &v2)
 {
     return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
 // Vector product
-Vector operator^(const Vector &v1, const Vector &v2)
+Vector3 operator^(const Vector3 &v1, const Vector3 &v2)
 {
-    Vector res;
+    Vector3 res;
 
     res.x = v1.y * v2.z - v1.z * v2.y;
     res.y = v1.z * v2.x - v1.x * v2.z;

@@ -1,13 +1,13 @@
 #include "Camera.h"
 
-Camera::Camera(Point position, double phi, double theta)
+Camera::Camera(Vector3 position, double phi, double theta)
 {
     _position = position;
     _phi = phi;
     _theta = theta;
 }
 
-Point Camera::getPosition()
+Vector3 Camera::getPosition()
 {
     return _position;
 }

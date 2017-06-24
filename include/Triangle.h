@@ -3,25 +3,22 @@
 #include <cmath>
 
 #include "Form.h"
-#include "Point.h"
-#include "Vector.h"
+#include "Vector3.h"
 
 class Triangle : public Form
 {
 
 private:
 
-    Point _origin;
-    Vector _v1;
-    Vector _v2;
+    Vector3 _v1;
+    Vector3 _v2;
 
 public:
 
-    static const double MinColor = 0.3;
-    static const double MaxColor = 0.7;
+    static const double MinColor;
+    static const double MaxColor;
 
-    Triangle(Point origin, Vector v1, Vector v2);
-    Triangle(Point origin, Point p1, Point p2);
+    Triangle(Vector3 origin, Vector3 v1, Vector3 v2);
 
     void render();
     void update(double delta_t);

@@ -1,21 +1,27 @@
 #include "WaterMesh.h"
 
-WaterMesh::WaterMesh(Point origin, double size, int splits, Wave wave) :
+WaterMesh::WaterMesh(Vector3 origin, double size, int splits) :
     _size(size),
     _splits(splits),
     _squares(splits, std::vector<Square>(splits, Square())),
     _elapsedTime(0)
 {
     getAnimation().setPos(origin);
-    _wave = wave;
 
-    for (unsigned int i = 0; i < _squares.size(); i++)
-        for (unsigned int j = 0; j < _squares[i].size(); j++)
-            _squares[i][j] = Square(Point(
-                                          size/(double)splits * (double)i - size/2.0 + size/(double)splits/2.0,
-                                          size/(double)splits * (double)j - size/2.0 + size/(double)splits/2.0,
-                                          0),
-                                    size/(double)splits);
+	for (unsigned int i = 0; i < _squares.size(); i++)
+	{
+		for (unsigned int j = 0; j < _squares[i].size(); j++)
+		{
+			Vector3 origin(
+				size / (double)splits * (double)i - size / 2.0 + size / (double)splits / 2.0,
+				size / (double)splits * (double)j - size / 2.0 + size / (double)splits / 2.0,
+				0);
+
+			_squares[i][j] = Square(
+				origin,
+				size / (double)splits);
+		}
+	}
 }
 
 void WaterMesh::render()
@@ -37,18 +43,31 @@ void WaterMesh::update(double delta_t)
 
     _elapsedTime += delta_t;
 
-    for (double x = 0; x < count(); x++)
+    for (int x = 0; x < count(); x++)
     {
-        for (double y = 0; y < count(); y++)
+        for (int y = 0; y < count(); y++)
         {
-            double x2 = x - count() / 2;
-            double y2 = y - count() / 2;
+            double x2 = (double)x - (double)count() / 2.0;
+            double y2 = (double)y - (double)count() / 2.0;
             x2 *= _size / _splits;
             y2 *= _size / _splits;
-            double intensity = _wave.getIntensity(Point2D(x2, y2), _elapsedTime);
-            setIntensity(x, y, intensity);
+
+            double intensity = 0;
+			for (int i = 0; i < _waves.size(); i++)
+				if (_waves[i] != NULL)
+					intensity += _waves[i]->getIntensity(Vector2(x2, y2), _elapsedTime);
+            
+			setIntensity(x, y, intensity);
         }
     }
+}
+
+void WaterMesh::addWave(Wave * wave)
+{
+	for (int i = 0; i < _waves.size(); i++)
+		if (_waves[i] == wave)
+			return;
+	_waves.push_back(wave);
 }
 
 unsigned int WaterMesh::count()

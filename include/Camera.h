@@ -1,25 +1,24 @@
 #pragma once
 
-#include "Point.h"
-#include "Vector.h"
+#include "Vector3.h"
 
 class Camera
 {
 private:
 
-    Point _position;
+	Vector3 _position;
     double _phi;
     double _theta;
 
 public:
 
-    Camera(Point position = Point(0,0,0), double phi = 0, double theta = 0);
+    Camera(Vector3 position = Vector3(0,0,0), double phi = 0, double theta = 0);
 
-    Point getPosition();
+	Vector3 getPosition();
     double getPhi();
     double getTheta();
 
     void rotateH(double angle);
     void rotateV(double angle);
-    void move(Vector vec);
+    void move(Vector3 vec);
 };
