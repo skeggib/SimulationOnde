@@ -23,7 +23,7 @@ private:
 
 public:
 
-    Wave(double a = 1, double f = 1, double c = 1, Vector2 source = Vector2(), double phaseChange = 0);
+	Wave(double a = 1, double f = 1, double c = 1, Vector2 source = Vector2(), double phaseChange = 0, std::vector<int> numbers = { });
 
 	void setSource(Vector2 source);
 

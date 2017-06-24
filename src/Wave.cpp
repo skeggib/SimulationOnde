@@ -1,12 +1,14 @@
 #include "Wave.h"
 
-Wave::Wave(double a, double f, double c, Vector2 source, double phaseChange) :
+Wave::Wave(double a, double f, double c, Vector2 source, double phaseChange, std::vector<int> numbers) :
     _a(a),
     _f(f),
     _c(c),
 	_phaseChange(phaseChange)
 {
     _source = source;
+	for (int i = 0; i < numbers.size(); i++)
+		addWave(numbers[i]);
 }
 
 void Wave::setSource(Vector2 source)
@@ -34,7 +36,7 @@ double Wave::getIntensity(Vector2 p, double t)
 {
     Vector2 dist = p - _source;
     double r = dist.norm();
-    double b = 0.5;
+    double b = 0.3;
 	double l = _f / _c;
 
 	t -= _phaseChange;

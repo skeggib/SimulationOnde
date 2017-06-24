@@ -186,14 +186,24 @@ int main(int argc, char* args[])
         double phi = camera.getPhi();
         double theta = camera.getTheta();
 
-        World world;
+		World world;
 
-        Wave wave1(0.4, 1, 1, Vector2(-1, 0));
-		Wave wave2(0.4, 1, 1, Vector2(1, 0));
+        WaterMesh mesh(Vector3(0, 0, 0), 10, 100);
 
-        WaterMesh mesh(Vector3(0, 0, 0), 10, 70);
-		mesh.addWave(&wave1);
-		mesh.addWave(&wave2);
+		double a = 1;
+		double f = 1;
+		double c = 1;
+		std::vector<int> numbers = { 0, 1, 2 };
+
+		mesh.addWave(new Wave(a, f, c, Vector2(0, 0), 0, numbers));
+		mesh.addWave(new Wave(a, f, c, Vector2(10, 0), 0, numbers));
+		mesh.addWave(new Wave(a, f, c, Vector2(0, 10), 0, numbers));
+		mesh.addWave(new Wave(a, f, c, Vector2(-10, 0), 0, numbers));
+		mesh.addWave(new Wave(a, f, c, Vector2(0, -10), 0, numbers));
+		mesh.addWave(new Wave(a, f, c, Vector2(20, 0), 0, numbers));
+		mesh.addWave(new Wave(a, f, c, Vector2(0, 20), 0, numbers));
+		mesh.addWave(new Wave(a, f, c, Vector2(-20, 0), 0, numbers));
+		mesh.addWave(new Wave(a, f, c, Vector2(0, -20), 0, numbers));
 
         world.add(&mesh);
 
@@ -203,6 +213,11 @@ int main(int argc, char* args[])
         // Center the cursor
         SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 		int mouse_dx = 0, mouse_dy = 0;
+
+		// FPS
+		int fps = 0;
+		double fpsElapsedTime = 0;
+		double fpsPreviousTime = 0;
 
         Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
@@ -236,6 +251,16 @@ int main(int argc, char* args[])
                 previous_time = current_time;
                 world.update(1e-3 * elapsed_time); // International system units : seconds
             }
+
+			// FPS
+			fps++;
+			fpsElapsedTime = current_time - fpsPreviousTime;
+			if (fpsElapsedTime > 1000)
+			{
+				fpsPreviousTime = current_time;
+				std::cout << "FPS: " << fps << std::endl;
+				fps = 0;
+			}
 
 			double speed = SPEED * elapsed_time * 1e-3;
 

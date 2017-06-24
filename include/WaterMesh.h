@@ -3,14 +3,13 @@
 #include <vector>
 
 #include "Form.h"
-#include "Square.h"
 #include "Wave.h"
 
 class WaterMesh : public Form
 {
 private:
 
-    std::vector< std::vector<Square> > _squares;
+    std::vector< std::vector<double> > _intensities;
     double _size;
     int _splits;
     double _elapsedTime;
@@ -20,6 +19,9 @@ private:
     void setIntensity(int x, int y, double intensity);
 
 public:
+
+	static const double MinColor;
+	static const double MaxColor;
 
     WaterMesh(Vector3 origin, double size, int splits);
 

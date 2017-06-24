@@ -1,46 +1,81 @@
 #include "WaterMesh.h"
 
+const double WaterMesh::MinColor = 0.5;
+const double WaterMesh::MaxColor = 0.9;
+
 WaterMesh::WaterMesh(Vector3 origin, double size, int splits) :
     _size(size),
     _splits(splits),
-    _squares(splits, std::vector<Square>(splits, Square())),
+    _intensities(splits + 1, std::vector<double>(splits + 1, 0)),
     _elapsedTime(0)
 {
     getAnimation().setPos(origin);
-
-	for (unsigned int i = 0; i < _squares.size(); i++)
-	{
-		for (unsigned int j = 0; j < _squares[i].size(); j++)
-		{
-			Vector3 origin(
-				size / (double)splits * (double)i - size / 2.0 + size / (double)splits / 2.0,
-				size / (double)splits * (double)j - size / 2.0 + size / (double)splits / 2.0,
-				0);
-
-			_squares[i][j] = Square(
-				origin,
-				size / (double)splits);
-		}
-	}
 }
 
 void WaterMesh::render()
 {
+	double squareSize = _size / (double)_splits;
+	double x1, y1, x2, y2;
+	double i1, i2, i3, i4;
+
+	Vector3 sun(-1, 1, -1);
+	double sun_norm = sun.norm();
+
+	Vector3 scalar;
+	double angle, color;
+
+	Vector3 v1, v2;
+
     Form::startRendering();
 
-    for (unsigned int i = 0; i < _squares.size(); i++)
-        for (unsigned int j = 0; j < _squares[i].size(); j++)
-                _squares[i][j].render();
+	glBegin(GL_TRIANGLES);
+
+	for (unsigned int i = 0; i < _intensities.size() - 1; i++)
+	{
+		for (unsigned int j = 0; j < _intensities[i].size() - 1; j++)
+		{
+			i1 = _intensities[i][j];
+			i2 = _intensities[i + 1][j];
+			i3 = _intensities[i][j + 1];
+			i4 = _intensities[i + 1][j + 1];
+
+			x1 = squareSize * (double)i - _size / 2.0;
+			y1 = squareSize * (double)j - _size / 2.0;
+
+			x2 = squareSize * ((double)i + 1) - _size / 2.0;
+			y2 = squareSize * ((double)j + 1) - _size / 2.0;
+
+			v1.x = x2 - x1;
+			v1.y = 0;
+			v1.z = i2 - i1;
+
+			v2.x = 0;
+			v2.y = y2 - y1;
+			v2.z = i3 - i1;
+
+			scalar = v1 ^ v2;
+			angle = - (scalar * sun) / (scalar.norm() * sun_norm);
+			color = angle * (MaxColor - MinColor) + MinColor;
+
+			glColor3f(0, 0.1, color);
+			glVertex3d(x1, y1, i1);
+			glVertex3d(x1, y2, i3);
+			glVertex3d(x2, y1, i2);
+
+			glColor3f(0, 0.1, color);
+			glVertex3d(x1, y2, i3);
+			glVertex3d(x2, y1, i2);
+			glVertex3d(x2, y2, i4);
+		}
+	}
+
+	glEnd();
 
     Form::endRendering();
 }
 
 void WaterMesh::update(double delta_t)
 {
-    for (unsigned int i = 0; i < _squares.size(); i++)
-        for (unsigned int j = 0; j < _squares[i].size(); j++)
-                _squares[i][j].update(delta_t);
-
     _elapsedTime += delta_t;
 
     for (int x = 0; x < count(); x++)
@@ -80,12 +115,5 @@ void WaterMesh::setIntensity(int x, int y, double intensity)
     if (x < 0 || y < 0 || x > _splits || y > _splits)
         return;
 
-    if (x > 0 && y > 0)
-        _squares[x-1][y-1].setIntensity4(intensity);
-    if (x > 0 && y < _splits)
-        _squares[x-1][y].setIntensity2(intensity);
-    if (x < _splits && y > 0)
-        _squares[x][y-1].setIntensity3(intensity);
-    if (x < _splits && y < _splits)
-        _squares[x][y].setIntensity1(intensity);
+	_intensities[x][y] = intensity;
 }

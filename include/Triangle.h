@@ -5,11 +5,12 @@
 #include "Form.h"
 #include "Vector3.h"
 
-class Triangle : public Form
+class Triangle
 {
 
 private:
 
+	Vector3 _origin;
     Vector3 _v1;
     Vector3 _v2;
 

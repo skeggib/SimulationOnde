@@ -3,12 +3,12 @@
 const double Triangle::MinColor = 0.5;
 const double Triangle::MaxColor = 0.9;
 
-Triangle::Triangle(Vector3 origin, Vector3 v1, Vector3 v2)
+Triangle::Triangle(Vector3 origin, Vector3 v1, Vector3 v2) :
+	_origin(origin),
+	_v1(v1),
+	_v2(v2)
 {
-    getAnimation().setPos(origin);
 
-    _v1 = v1;
-    _v2 = v2;
 }
 
 #include <gl/GL.h>
@@ -23,18 +23,14 @@ void Triangle::render()
 	double angle = -dot / (scalar_norm * sun_norm);
 	double color = angle * (MaxColor - MinColor) + MinColor;
 
-    Form::startRendering();
-
-    glBegin(GL_TRIANGLES);
-    {
+    //glBegin(GL_TRIANGLES);
+    //{
         glColor3f(0,0.1,color);
-        glVertex3d(0, 0, 0);
-        glVertex3d(_v1.x, _v1.y, _v1.z);
-        glVertex3d(_v2.x, _v2.y, _v2.z);
-    }
-    glEnd();
-
-    Form::endRendering();
+        glVertex3d(_origin.x, _origin.y, _origin.z);
+        glVertex3d(_origin.x + _v1.x, _origin.y + _v1.y, _origin.z + _v1.z);
+        glVertex3d(_origin.x + _v2.x, _origin.y + _v2.y, _origin.z + _v2.z);
+    //}
+    //glEnd();
 }
 
 void Triangle::update(double delta_t)
