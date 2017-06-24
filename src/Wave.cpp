@@ -1,11 +1,11 @@
 #include "Wave.h"
 
-Wave::Wave(double a, double f, double c) :
+Wave::Wave(double a, double f, double c, Point2D source) :
     _a(a),
     _f(f),
     _c(c)
 {
-
+    _source = source;
 }
 
 double porte(double t)
@@ -17,15 +17,13 @@ double porte(double t)
     return 1;
 }
 
-double Wave::getIntensity(double r, double t)
+double Wave::getIntensity(Point2D p, double t)
 {
-    double b = 0.2;
+    Vector2D dist = p - _source;
+    double r = dist.norm();
+    double b = 0.5;
 
-    if (r > _a / b)
-        return 0;
+    //double lambda = _c / _f;
 
-    double lambda = _c / _f;
-
-    return (_a * cos(2*M_PI*_f * (r/_c - t))
-        + b * cos(2*M_PI*_f * (r/_c - t) - M_PI) * r);
+    return _a * cos(2*M_PI*_f * (r/_c - t)) * exp(-b * r);
 }

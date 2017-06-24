@@ -12,11 +12,7 @@ Vector::Vector(double x, double y, double z)
 
 double Vector::norm()
 {
-    double norm;
-
-    norm = sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
-
-    return norm;
+    return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
 }
 
 Vector Vector::integral(double delta_t)
@@ -61,11 +57,7 @@ Vector operator-(const Vector &v)
 
 Vector operator-(const Vector &v1, const Vector &v2)
 {
-    Vector res = -v2;
-
-    res = res + v1;
-
-    return res;
+    return -v2 + v1;
 }
 
 Vector operator*(const double &k, const Vector &v)
@@ -82,11 +74,7 @@ Vector operator*(const double &k, const Vector &v)
 // Scalar product
 double operator*(const Vector &v1, const Vector &v2)
 {
-    double res;
-
-    res = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-
-    return res;
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
 // Vector product

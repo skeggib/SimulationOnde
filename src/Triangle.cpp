@@ -28,9 +28,7 @@ void Triangle::render()
 		double scalar_norm = scalar.norm();
 		double sun_norm = sun.norm();
 		double angle = -dot / (scalar_norm * sun_norm);
-		double min = 0.3;
-		double max = 0.9;
-		double color = angle * (max - min) + min;
+		double color = angle * (MaxColor - MinColor) + MinColor;
 
         glColor3f(0,0.1,color);
         glVertex3d(_origin.x, _origin.y, _origin.z);
