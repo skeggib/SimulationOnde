@@ -1,8 +1,10 @@
 #pragma once
 
+#define _USE_MATH_DEFINES
 #include <cmath>
+#include <vector>
 
-#include "Point2D.h"
+#include "Vector2.h"
 
 class Wave
 {
@@ -13,11 +15,18 @@ private:
     double _f;
     double _c;
 
-    Point2D _source;
+	double _phaseChange;
+
+    Vector2 _source;
+
+	std::vector<int> _waves;
 
 public:
 
-    Wave(double a = 1, double f = 1, double c = 1, Point2D source = Point2D());
+	Wave(double a = 1, double f = 1, double c = 1, Vector2 source = Vector2(), double phaseChange = 0, std::vector<int> numbers = { });
 
-    double getIntensity(Point2D p, double t);
+	void setSource(Vector2 source);
+
+    double getIntensity(Vector2 p, double t);
+	void addWave(int number);
 };

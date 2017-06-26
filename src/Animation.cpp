@@ -1,7 +1,7 @@
 #include "Animation.h"
 
 Animation::Animation(double ph, double th,
-                  Vector accel, Vector speed, Point p)
+					 Vector3 accel, Vector3 speed, Vector3 p)
 {
     phi = ph;
     theta = th;

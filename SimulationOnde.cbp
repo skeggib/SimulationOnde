@@ -33,6 +33,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
 			<Add directory="./include" />
 		</Compiler>
@@ -48,28 +49,22 @@
 		<Unit filename="include/Animation.h" />
 		<Unit filename="include/Camera.h" />
 		<Unit filename="include/Color.h" />
-		<Unit filename="include/Coordinates.h" />
 		<Unit filename="include/Form.h" />
-		<Unit filename="include/Point.h" />
-		<Unit filename="include/Point2D.h" />
 		<Unit filename="include/Square.h" />
 		<Unit filename="include/Triangle.h" />
-		<Unit filename="include/Vector.h" />
-		<Unit filename="include/Vector2D.h" />
+		<Unit filename="include/Vector2.h" />
+		<Unit filename="include/Vector3.h" />
 		<Unit filename="include/WaterMesh.h" />
 		<Unit filename="include/Wave.h" />
 		<Unit filename="include/World.h" />
 		<Unit filename="src/Animation.cpp" />
 		<Unit filename="src/Camera.cpp" />
 		<Unit filename="src/Color.cpp" />
-		<Unit filename="src/Coordinates.cpp" />
 		<Unit filename="src/Form.cpp" />
-		<Unit filename="src/Point.cpp" />
-		<Unit filename="src/Point2D.cpp" />
 		<Unit filename="src/Square.cpp" />
 		<Unit filename="src/Triangle.cpp" />
-		<Unit filename="src/Vector.cpp" />
-		<Unit filename="src/Vector2D.cpp" />
+		<Unit filename="src/Vector2.cpp" />
+		<Unit filename="src/Vector3.cpp" />
 		<Unit filename="src/WaterMesh.cpp" />
 		<Unit filename="src/Wave.cpp" />
 		<Unit filename="src/World.cpp" />

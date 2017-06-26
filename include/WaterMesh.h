@@ -3,27 +3,32 @@
 #include <vector>
 
 #include "Form.h"
-#include "Square.h"
 #include "Wave.h"
 
 class WaterMesh : public Form
 {
 private:
 
-    std::vector< std::vector<Square> > _squares;
+    std::vector< std::vector<double> > _intensities;
     double _size;
     int _splits;
-    Wave _wave;
     double _elapsedTime;
+
+	std::vector<Wave*> _waves;
 
     void setIntensity(int x, int y, double intensity);
 
 public:
 
-    WaterMesh(Point origin, double size, int splits, Wave wave);
+	static const double MinColor;
+	static const double MaxColor;
+
+    WaterMesh(Vector3 origin, double size, int splits);
 
     void render();
     void update(double delta_t);
+
+	void addWave(Wave* wave);
 
     /**
      * @brief Counts the number of points in one direction (axis)

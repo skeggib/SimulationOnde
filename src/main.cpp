@@ -1,10 +1,13 @@
 // Using SDL, SDL OpenGL and standard IO
 #include <iostream>
 #include <cmath>
+#include <chrono>
 
 #include <windows.h>
 
 #define SDL_MAIN_HANDLED
+
+#define SPEED 0.3
 
 #include <SDL2/SDL.h>
 #include <GL/gl.h>
@@ -165,6 +168,9 @@ int main(int argc, char* args[])
     }
     else
     {
+        // Hide cursor
+        SDL_ShowCursor(SDL_DISABLE);
+
         // Main loop flag
         bool quit = false;
         Uint32 current_time, previous_time, elapsed_time;
@@ -173,23 +179,54 @@ int main(int argc, char* args[])
         SDL_Event event;
 
         // Camera position
-        Camera camera(Point(5, 5, 5));
+		Vector3 origin(10, 10, 10);
+        Camera camera(origin);
         camera.rotateH(-45);
         camera.rotateV(35);
 
-        World world;
+        double phi = camera.getPhi();
+        double theta = camera.getTheta();
 
-        Wave wave(1, 0.7, 2, Point2D(1, -1));
-        WaterMesh mesh(Point(0, 0, 0), 20, 80, wave);
+		World world;
+
+        WaterMesh mesh(Vector3(0, 0, 0), 10, 100);
+
+		double a = 0.5;
+		double f = 1;
+		double c = 1.1;
+		std::vector<int> numbers = { };
+
+		mesh.addWave(new Wave(a, f, c, Vector2(0, 0), 0, numbers));
+		mesh.addWave(new Wave(a, f, c, Vector2(1, 1), 0, numbers));
+
+		// First reflexion
+		//mesh.addWave(new Wave(a, f, c, Vector2(10, 0), 0, numbers));
+		//mesh.addWave(new Wave(a, f, c, Vector2(0, 10), 0, numbers));
+		//mesh.addWave(new Wave(a, f, c, Vector2(-10, 0), 0, numbers));
+		//mesh.addWave(new Wave(a, f, c, Vector2(0, -10), 0, numbers));
+
+		//// Second reflexion
+		//mesh.addWave(new Wave(a, f, c, Vector2(10, 10), 0, numbers));
+		//mesh.addWave(new Wave(a, f, c, Vector2(-10, 10), 0, numbers));
+		//mesh.addWave(new Wave(a, f, c, Vector2(10, -10), 0, numbers));
+		//mesh.addWave(new Wave(a, f, c, Vector2(-10, -10), 0, numbers));
+
         world.add(&mesh);
 
         // Get first "current time"
         previous_time = SDL_GetTicks();
-        // While application is running
 
         // Center the cursor
         SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 		int mouse_dx = 0, mouse_dy = 0;
+
+		// FPS
+		int fps = 0;
+		double fpsElapsedTime = 0;
+		double fpsPreviousTime = 0;
+
+		double updateMilliseconds = 0;
+		double renderMilliseconds = 0;
 
         Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
@@ -214,39 +251,8 @@ int main(int argc, char* args[])
                     break;
                 }
             }
-
-            if(statEv[SDL_SCANCODE_ESCAPE])
-            {
-                quit = true;
-            }
-            if(statEv[SDL_SCANCODE_LEFT])
-            {
-                std::cout << "LEFT" << std::endl;
-            }
-            if(statEv[SDL_SCANCODE_RIGHT])
-            {
-                std::cout << "RIGHT" << std::endl;
-            }
-            if(statEv[SDL_SCANCODE_UP])
-            {
-                std::cout << "UP" << std::endl;
-            }
-            if(statEv[SDL_SCANCODE_DOWN])
-            {
-                std::cout << "DOWN" << std::endl;
-            }
-            if(statEv[SDL_SCANCODE_SPACE])
-            {
-                std::cout << "SPACE" << std::endl;
-            }
-            if(statEv[SDL_SCANCODE_LSHIFT])
-            {
-                std::cout << "LSHIFT" << std::endl;
-            }
-            if(statEv[SDL_SCANCODE_RETURN])
-            {
-                std::cout << "EVENT" << std::endl;
-            }
+			
+			std::chrono::time_point<std::chrono::steady_clock> startUpdateTime = std::chrono::high_resolution_clock::now();
 
             // Update the scene
             current_time = SDL_GetTicks(); // get the elapsed time from SDL initialization (ms)
@@ -257,11 +263,77 @@ int main(int argc, char* args[])
                 world.update(1e-3 * elapsed_time); // International system units : seconds
             }
 
+			std::chrono::time_point<std::chrono::steady_clock> endUpdateTime = std::chrono::high_resolution_clock::now();
+			std::chrono::duration<double, std::milli> updateDuration = endUpdateTime - startUpdateTime;
+			updateMilliseconds += updateDuration.count();
+
+			double speed = SPEED;// *(double)elapsed_time * 1e-3;
+
+			if (statEv[SDL_SCANCODE_ESCAPE])
+			{
+				quit = true;
+			}
+			if (statEv[SDL_SCANCODE_A])
+			{
+				camera.move(0, -speed, 0);
+			}
+			if (statEv[SDL_SCANCODE_D])
+			{
+				camera.move(0, speed, 0);
+			}
+			if (statEv[SDL_SCANCODE_W])
+			{
+				camera.move(-speed, 0, 0);
+			}
+			if (statEv[SDL_SCANCODE_S])
+			{
+				camera.move(speed, 0, 0);
+			}
+			if (statEv[SDL_SCANCODE_SPACE])
+			{
+				camera.move(0, 0, speed);
+			}
+			if (statEv[SDL_SCANCODE_LSHIFT])
+			{
+				camera.move(0, 0, -speed);
+			}
+			if (statEv[SDL_SCANCODE_RETURN])
+			{
+				std::cout << "EVENT" << std::endl;
+			}
+			if (statEv[SDL_SCANCODE_R])
+			{
+				camera.setPhi(phi);
+				camera.setTheta(theta);
+				camera.setPosition(origin);
+			}
+
+			std::chrono::time_point<std::chrono::steady_clock> startRenderTime = std::chrono::high_resolution_clock::now();
+
             // Render the scene
             world.render(camera);
 
+			std::chrono::time_point<std::chrono::steady_clock> endRenderTime = std::chrono::high_resolution_clock::now();
+			std::chrono::duration<double, std::milli> renderDuration = endRenderTime - startRenderTime;
+			renderMilliseconds += renderDuration.count();
+
             // Update window screen
             SDL_GL_SwapWindow(gWindow);
+
+			// FPS
+			fps++;
+			fpsElapsedTime = current_time - fpsPreviousTime;
+			if (fpsElapsedTime > 1000)
+			{
+				fpsPreviousTime = current_time;
+				std::cout << "FPS: " << fps
+					<< " (update: " << updateMilliseconds << " ms" 
+					<< ", render: " << renderMilliseconds << " ms)"
+					<< std::endl;
+				fps = 0;
+				updateMilliseconds = 0;
+				renderMilliseconds = 0;
+			}
         }
     }
 

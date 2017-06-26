@@ -7,7 +7,6 @@
 
 #include "Color.h"
 #include "Animation.h"
-#include "Point.h"
 
 // Generic class to render and animate an object
 class Form
