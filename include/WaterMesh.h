@@ -30,9 +30,6 @@ public:
 
 	void addWave(Wave* wave);
 
-    /**
-     * @brief Counts the number of points in one direction (axis)
-     * @return The number of points in one direction (axis)
-     */
-    unsigned int count();
+	void setSplits(int splits);
+	int getSplits();
 };

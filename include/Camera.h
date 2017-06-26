@@ -27,6 +27,5 @@ public:
 
     void rotateH(double angle);
     void rotateV(double angle);
-    void move(double forward, double left, double up);
-    void reset(void);
+    void move(int forward, int left, int up);
 };

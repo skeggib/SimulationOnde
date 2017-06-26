@@ -65,11 +65,13 @@ void Camera::rotateV(double angle)
     setPhi(_phi + angle);
 }
 
-void Camera::move(double forward, double left, double up)
+void Camera::move(int forward, int left, int up)
 {
+	double speed = 0.3;
+
 	Vector3 Forward(sin(_theta*M_PI/180.0 + M_PI_2), cos(_theta*M_PI/180.0 + M_PI_2), 0);
 	Vector3 Left(sin(_theta*M_PI/180.0), cos(_theta*M_PI/180.0), 0);
 	Vector3 Up(0, 0, 1);
 
-    _position = _position + (forward * Forward) + (left * Left) + (up * Up);
+    _position = _position + ((double)forward * speed * Forward) + ((double)left * speed * Left) + ((double)up * speed * Up);
 }

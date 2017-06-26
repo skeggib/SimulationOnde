@@ -7,8 +7,6 @@
 
 #define SDL_MAIN_HANDLED
 
-#define SPEED 0.3
-
 #include <SDL2/SDL.h>
 #include <GL/gl.h>
 #include <GL/GLU.h>
@@ -60,6 +58,9 @@ bool init(SDL_Window** window, SDL_GLContext* context)
         // Use OpenGL 2.1
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
 
         // Create window
         *window = SDL_CreateWindow( "Simulation d'onde", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
@@ -189,27 +190,14 @@ int main(int argc, char* args[])
 
 		World world;
 
-        WaterMesh mesh(Vector3(0, 0, 0), 10, 100);
+        WaterMesh mesh(Vector3(0, 0, 0), 5, 100);
 
-		double a = 0.5;
+		double a = 0.2;
 		double f = 1;
-		double c = 1.1;
+		double c = 0.72;
 		std::vector<int> numbers = { };
 
 		mesh.addWave(new Wave(a, f, c, Vector2(0, 0), 0, numbers));
-		mesh.addWave(new Wave(a, f, c, Vector2(1, 1), 0, numbers));
-
-		// First reflexion
-		//mesh.addWave(new Wave(a, f, c, Vector2(10, 0), 0, numbers));
-		//mesh.addWave(new Wave(a, f, c, Vector2(0, 10), 0, numbers));
-		//mesh.addWave(new Wave(a, f, c, Vector2(-10, 0), 0, numbers));
-		//mesh.addWave(new Wave(a, f, c, Vector2(0, -10), 0, numbers));
-
-		//// Second reflexion
-		//mesh.addWave(new Wave(a, f, c, Vector2(10, 10), 0, numbers));
-		//mesh.addWave(new Wave(a, f, c, Vector2(-10, 10), 0, numbers));
-		//mesh.addWave(new Wave(a, f, c, Vector2(10, -10), 0, numbers));
-		//mesh.addWave(new Wave(a, f, c, Vector2(-10, -10), 0, numbers));
 
         world.add(&mesh);
 
@@ -225,8 +213,9 @@ int main(int argc, char* args[])
 		double fpsElapsedTime = 0;
 		double fpsPreviousTime = 0;
 
-		double updateMilliseconds = 0;
-		double renderMilliseconds = 0;
+		double updateMeanMs = 0;
+		double renderMeanMs = 0;
+		double splitsMean = 0;
 
         Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
@@ -265,9 +254,7 @@ int main(int argc, char* args[])
 
 			std::chrono::time_point<std::chrono::steady_clock> endUpdateTime = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double, std::milli> updateDuration = endUpdateTime - startUpdateTime;
-			updateMilliseconds += updateDuration.count();
-
-			double speed = SPEED;// *(double)elapsed_time * 1e-3;
+			updateMeanMs += updateDuration.count();
 
 			if (statEv[SDL_SCANCODE_ESCAPE])
 			{
@@ -275,27 +262,27 @@ int main(int argc, char* args[])
 			}
 			if (statEv[SDL_SCANCODE_A])
 			{
-				camera.move(0, -speed, 0);
+				camera.move(0, -1, 0);
 			}
 			if (statEv[SDL_SCANCODE_D])
 			{
-				camera.move(0, speed, 0);
+				camera.move(0, 1, 0);
 			}
 			if (statEv[SDL_SCANCODE_W])
 			{
-				camera.move(-speed, 0, 0);
+				camera.move(-1, 0, 0);
 			}
 			if (statEv[SDL_SCANCODE_S])
 			{
-				camera.move(speed, 0, 0);
+				camera.move(1, 0, 0);
 			}
 			if (statEv[SDL_SCANCODE_SPACE])
 			{
-				camera.move(0, 0, speed);
+				camera.move(0, 0, 1);
 			}
 			if (statEv[SDL_SCANCODE_LSHIFT])
 			{
-				camera.move(0, 0, -speed);
+				camera.move(0, 0, -1);
 			}
 			if (statEv[SDL_SCANCODE_RETURN])
 			{
@@ -315,10 +302,12 @@ int main(int argc, char* args[])
 
 			std::chrono::time_point<std::chrono::steady_clock> endRenderTime = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double, std::milli> renderDuration = endRenderTime - startRenderTime;
-			renderMilliseconds += renderDuration.count();
+			renderMeanMs += renderDuration.count();
 
             // Update window screen
             SDL_GL_SwapWindow(gWindow);
+
+			splitsMean += mesh.getSplits();
 
 			// FPS
 			fps++;
@@ -326,14 +315,21 @@ int main(int argc, char* args[])
 			if (fpsElapsedTime > 1000)
 			{
 				fpsPreviousTime = current_time;
-				std::cout << "FPS: " << fps
-					<< " (update: " << updateMilliseconds << " ms" 
-					<< ", render: " << renderMilliseconds << " ms)"
-					<< std::endl;
+				std::cout << "FPS: " << fps << std::endl
+					<< "\tupdate: " << updateMeanMs / (double)fps << " ms" << std::endl
+					<< "\trender: " << renderMeanMs / (double)fps << " ms" << std::endl
+					<< "\tsplits: " << splitsMean / (double) fps << std::endl;
 				fps = 0;
-				updateMilliseconds = 0;
-				renderMilliseconds = 0;
+				updateMeanMs = 0;
+				renderMeanMs = 0;
+				splitsMean = 0;
 			}
+
+			double time = updateDuration.count() + renderDuration.count();
+			if (time > 33)
+				mesh.setSplits(mesh.getSplits() * 0.9);
+			else if (time < 30)
+				mesh.setSplits(mesh.getSplits() * 1.1);
         }
     }
 

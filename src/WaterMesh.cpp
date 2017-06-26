@@ -5,11 +5,10 @@ const double WaterMesh::MaxColor = 0.9;
 
 WaterMesh::WaterMesh(Vector3 origin, double size, int splits) :
     _size(size),
-    _splits(splits),
-    _intensities(splits + 1, std::vector<double>(splits + 1, 0)),
     _elapsedTime(0)
 {
     getAnimation().setPos(origin);
+	setSplits(splits);
 }
 
 void WaterMesh::render()
@@ -78,12 +77,14 @@ void WaterMesh::update(double delta_t)
 {
     _elapsedTime += delta_t;
 
-    for (int x = 0; x < count(); x++)
+	double count = _intensities.size();
+
+    for (int x = 0; x < count; x++)
     {
-        for (int y = 0; y < count(); y++)
+        for (int y = 0; y < count; y++)
         {
-            double x2 = (double)x - (double)count() / 2.0;
-            double y2 = (double)y - (double)count() / 2.0;
+            double x2 = (double)x - count / 2.0;
+            double y2 = (double)y - count / 2.0;
             x2 *= _size / _splits;
             y2 *= _size / _splits;
 
@@ -105,15 +106,21 @@ void WaterMesh::addWave(Wave * wave)
 	_waves.push_back(wave);
 }
 
-unsigned int WaterMesh::count()
-{
-    return _splits + 1;
-}
-
 void WaterMesh::setIntensity(int x, int y, double intensity)
 {
     if (x < 0 || y < 0 || x > _splits || y > _splits)
         return;
 
 	_intensities[x][y] = intensity;
+}
+
+void WaterMesh::setSplits(int splits)
+{
+	_intensities = std::vector< std::vector<double> >(splits + 1, std::vector<double>(splits + 1, 0));
+	_splits = splits;
+}
+
+int WaterMesh::getSplits()
+{
+	return _splits;
 }

@@ -44,16 +44,16 @@ double Wave::getIntensity(Vector2 p, double t)
 	double rect;
 	if (_waves.size() > 0)
 	{
-		rect = 1;
+		rect = 0;
 		for (int i = 0; i < _waves.size(); i++)
-			rect *= rectangular((r - _c * t + l / 2.0 + (double)_waves[i] * l) / _c * _f);
+			rect += rectangular((r - _c * t + l / 2.0 + (double)_waves[i] * l) / _c * _f);
 		if (rect == 0)
 			return 0;
 	}
 	else
 		rect = 1;
 
-	return _a * cos(2 * M_PI*_f * (r / _c - t) + M_PI / 2.0) * exp(-b * r) * rect;
+	return _a * cos(2 * M_PI*_f * (r / _c - t) + M_PI / 2.0) * exp(-r / l) * rect;
 }
 
 void Wave::addWave(int number)
