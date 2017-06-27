@@ -15,6 +15,12 @@
 #include "World.h"
 #include "WaterMesh.h"
 
+#ifdef _MinGW
+    #define TIME_POINT std::chrono::_V2::system_clock::time_point
+#else
+    #define TIME_POINT std::chrono::time_point<std::chrono::steady_clock>
+#endif
+
 /***************************************************************************/
 /* Constants and functions declarations                                    */
 /***************************************************************************/
@@ -241,8 +247,8 @@ int main(int argc, char* args[])
                     break;
                 }
             }
-			
-			std::chrono::time_point<std::chrono::steady_clock> startUpdateTime = std::chrono::high_resolution_clock::now();
+
+			TIME_POINT startUpdateTime = std::chrono::high_resolution_clock::now();
 
             // Update the scene
             current_time = SDL_GetTicks(); // get the elapsed time from SDL initialization (ms)
@@ -253,7 +259,7 @@ int main(int argc, char* args[])
                 world.update(1e-3 * elapsed_time); // International system units : seconds
             }
 
-			std::chrono::time_point<std::chrono::steady_clock> endUpdateTime = std::chrono::high_resolution_clock::now();
+			TIME_POINT endUpdateTime = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double, std::milli> updateDuration = endUpdateTime - startUpdateTime;
 			updateMeanMs += updateDuration.count();
 
@@ -285,7 +291,7 @@ int main(int argc, char* args[])
 			{
 				camera.move(0, 0, -1);
 			}
-			
+
 			if (statEv[SDL_SCANCODE_RETURN])
 			{
 				if (!waveAdded)
@@ -298,7 +304,7 @@ int main(int argc, char* args[])
 			{
 				waveAdded = false;
 			}
-			
+
 			if (statEv[SDL_SCANCODE_R])
 			{
 				camera.setPhi(phi);
@@ -306,12 +312,12 @@ int main(int argc, char* args[])
 				camera.setPosition(origin);
 			}
 
-			std::chrono::time_point<std::chrono::steady_clock> startRenderTime = std::chrono::high_resolution_clock::now();
+			TIME_POINT startRenderTime = std::chrono::high_resolution_clock::now();
 
             // Render the scene
             world.render(camera);
 
-			std::chrono::time_point<std::chrono::steady_clock> endRenderTime = std::chrono::high_resolution_clock::now();
+			TIME_POINT endRenderTime = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double, std::milli> renderDuration = endRenderTime - startRenderTime;
 			renderMeanMs += renderDuration.count();
 

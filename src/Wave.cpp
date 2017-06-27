@@ -1,7 +1,5 @@
 #include "Wave.h"
 
-const Cosinus Wave::cosinus = Cosinus(100);
-
 Wave::Wave(double a, double coefAttAmplitude, double f, double c, Vector2 source, double phaseChange) :
 	_a(a),
 	_coefAttAmplitude(coefAttAmplitude),

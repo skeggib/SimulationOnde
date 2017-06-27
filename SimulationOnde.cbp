@@ -33,8 +33,9 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-std=c++11" />
+			<Add option="-std=c++0x" />
 			<Add option="-fexceptions" />
+			<Add option="-D_MinGW" />
 			<Add directory="./include" />
 		</Compiler>
 		<Linker>
