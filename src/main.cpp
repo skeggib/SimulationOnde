@@ -242,11 +242,12 @@ int main(int argc, char* args[])
 
 		// Drag'n'drop
 		bool drag = false;
+		bool drag_hud = false;
 		int x_beg = 0;
 		int y_beg = 0;
 
 		// Slider
-		Slider slider(0, 10, 5, {50,50,400-100,4}, {400/2 - 20/2, 40 - 10, 20, 40});
+		Slider slider(2, 4, 3, {50,50,300,4}, {0,0, 20, 40});
 
         Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
@@ -268,12 +269,17 @@ int main(int argc, char* args[])
                         x_beg = mouse_dx;
                         y_beg = mouse_dy;
                     }
+                    else if(SDL_GetMouseFocus() == hud)
+                    {
+                        drag_hud = true;
+                    }
                     break;
                 case SDL_MOUSEBUTTONUP: // On relache le drag'n'drop
                     drag = false;
+                    drag_hud = false;
                     break;
                 case SDL_MOUSEMOTION:
-                    if(drag)
+                    if(drag && SDL_GetMouseFocus() == gWindow)
                     {
                         SDL_GetMouseState( &mouse_dx, &mouse_dy );
 //                        SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
@@ -281,6 +287,12 @@ int main(int argc, char* args[])
                         camera.rotateV((double)(mouse_dy - y_beg) / SPEED/2);
                         x_beg = mouse_dx;
                         y_beg = mouse_dy;
+                    }
+                    else if(drag_hud && SDL_GetMouseFocus() == hud)
+                    {
+                        SDL_GetMouseState( &mouse_dx, &mouse_dy );
+                        slider.move(mouse_dx, mouse_dy);
+                        std::cout << "> VALUE : " << slider.getValue() << std::endl;
                     }
                     break;
                 default:
@@ -362,14 +374,7 @@ int main(int argc, char* args[])
 //            SDL_Rect bar = {50,50,400-100,4};
 //            SDL_Rect cursor = {400/2 - 20/2, 40 - 10, 20, 40};
 
-            SDL_Rect bar = slider.getDestBar();
-            SDL_Rect cur = slider.getDestCur();
-            SDL_SetRenderDrawColor(hudRenderer, 255,255,255,255);
-            SDL_RenderFillRect(hudRenderer, &bar);
-
-            SDL_SetRenderDrawColor(hudRenderer, 100,100,100,255);
-            SDL_RenderFillRect(hudRenderer, &cur);
-
+            slider.draw(hudRenderer);
             SDL_RenderPresent( hudRenderer );
         }
     }
