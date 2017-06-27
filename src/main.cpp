@@ -192,14 +192,11 @@ int main(int argc, char* args[])
 
         WaterMesh mesh(Vector3(0, 0, 0), 5, 100);
 
-		double a = 0.7;
+		double a = 0.5;
 		double coefAttAmplitude = 0.6;
-		double f = 1;
+		double f = 1.3;
 		double c = 0.72;
 		std::vector<int> numbers = { };
-
-		mesh.addWave(new Wave(a, coefAttAmplitude, f, c, Vector2(0, 0), 0));
-		mesh.addWave(new Wave(a, coefAttAmplitude, f, c, Vector2(1, 1), 0.5));
 
         world.add(&mesh);
 
@@ -218,6 +215,8 @@ int main(int argc, char* args[])
 		double updateMeanMs = 0;
 		double renderMeanMs = 0;
 		double splitsMean = 0;
+
+		bool waveAdded = false;
 
         Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
@@ -286,10 +285,20 @@ int main(int argc, char* args[])
 			{
 				camera.move(0, 0, -1);
 			}
+			
 			if (statEv[SDL_SCANCODE_RETURN])
 			{
-				std::cout << "EVENT" << std::endl;
+				if (!waveAdded)
+				{
+					waveAdded = true;
+					mesh.addWave(new Wave(a, coefAttAmplitude, f, c, Vector2(0, 0)));
+				}
 			}
+			if (!statEv[SDL_SCANCODE_RETURN])
+			{
+				waveAdded = false;
+			}
+			
 			if (statEv[SDL_SCANCODE_R])
 			{
 				camera.setPhi(phi);

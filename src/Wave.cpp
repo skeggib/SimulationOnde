@@ -2,13 +2,6 @@
 
 const Cosinus Wave::cosinus = Cosinus(100);
 
-double Wave::getAmplitude(double t)
-{
-	if (t < 0)
-		return 0;
-	return _a * exp(-t / _coefAttAmplitude);
-}
-
 Wave::Wave(double a, double coefAttAmplitude, double f, double c, Vector2 source, double phaseChange) :
 	_a(a),
 	_coefAttAmplitude(coefAttAmplitude),
@@ -23,6 +16,11 @@ Wave::Wave(double a, double coefAttAmplitude, double f, double c, Vector2 source
 void Wave::setSource(Vector2 source)
 {
 	_source = source;
+}
+
+void Wave::setPhaseChange(double t)
+{
+	_phaseChange = t;
 }
 
 double porte(double t)
@@ -47,7 +45,12 @@ double Wave::getIntensity(Vector2 p, double t)
     double x = dist.norm();
 	double l = _c / _f;
 
-	t -= _phaseChange;
+	return getAmplitude(t - x/_c) * cos(2 * M_PI*_f * (x / _c - t + _phaseChange) - M_PI / 2.0) * exp(-x / l);
+}
 
-	return getAmplitude(t - x/_c) * cos(2 * M_PI*_f * (x / _c - t) - M_PI / 2.0) * exp(-x / l);
+double Wave::getAmplitude(double t)
+{
+	if (t - _phaseChange < 0)
+		return 0;
+	return _a * exp(-(t - _phaseChange) / _coefAttAmplitude);
 }

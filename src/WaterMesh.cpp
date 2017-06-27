@@ -77,8 +77,16 @@ void WaterMesh::update(double delta_t)
 {
     _elapsedTime += delta_t;
 
-	double count = _intensities.size();
+	std::vector<Wave*>::iterator it = _waves.begin();
+	while (it != _waves.end())
+	{
+		if ((*it)->getAmplitude(_elapsedTime) < 1e-4)
+			it = _waves.erase(it);
+		if (it != _waves.end())
+			it++;
+	}
 
+	double count = _intensities.size();
     for (int x = 0; x < count; x++)
     {
         for (int y = 0; y < count; y++)
@@ -103,6 +111,7 @@ void WaterMesh::addWave(Wave * wave)
 	for (int i = 0; i < _waves.size(); i++)
 		if (_waves[i] == wave)
 			return;
+	wave->setPhaseChange(_elapsedTime);
 	_waves.push_back(wave);
 }
 

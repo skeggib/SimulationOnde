@@ -23,13 +23,13 @@ private:
 
 	static const Cosinus cosinus;
 
-	double getAmplitude(double t);
-
 public:
 
 	Wave(double a = 1, double coefAttAmplitude = 0.3, double f = 1, double c = 1, Vector2 source = Vector2(), double phaseChange = 0);
 
 	void setSource(Vector2 source);
+	void setPhaseChange(double t);
 
+	double getAmplitude(double t);
     double getIntensity(Vector2 p, double t);
 };
