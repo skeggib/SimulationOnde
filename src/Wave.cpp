@@ -1,14 +1,23 @@
 #include "Wave.h"
 
-Wave::Wave(double a, double f, double c, Vector2 source, double phaseChange, std::vector<int> numbers) :
-    _a(a),
+const Cosinus Wave::cosinus = Cosinus(100);
+
+double Wave::getAmplitude(double t)
+{
+	if (t < 0)
+		return 0;
+	return _a * exp(-t / _coefAttAmplitude);
+}
+
+Wave::Wave(double a, double coefAttAmplitude, double f, double c, Vector2 source, double phaseChange) :
+	_a(a),
+	_coefAttAmplitude(coefAttAmplitude),
     _f(f),
     _c(c),
+	_source(source),
 	_phaseChange(phaseChange)
 {
-    _source = source;
-	for (int i = 0; i < numbers.size(); i++)
-		addWave(numbers[i]);
+
 }
 
 void Wave::setSource(Vector2 source)
@@ -35,31 +44,10 @@ double rectangular(double x)
 double Wave::getIntensity(Vector2 p, double t)
 {
     Vector2 dist = p - _source;
-    double r = dist.norm();
-    double b = 6;
+    double x = dist.norm();
 	double l = _c / _f;
 
 	t -= _phaseChange;
 
-	double rect;
-	if (_waves.size() > 0)
-	{
-		rect = 0;
-		for (int i = 0; i < _waves.size(); i++)
-			rect += rectangular((r - _c * t + l / 2.0 + (double)_waves[i] * l) / _c * _f);
-		if (rect == 0)
-			return 0;
-	}
-	else
-		rect = 1;
-
-	return _a * cos(2 * M_PI*_f * (r / _c - t) + M_PI / 2.0) * exp(-r / l) * rect;
-}
-
-void Wave::addWave(int number)
-{
-	for (int i = 0; i < _waves.size(); i++)
-		if (_waves[i] == number)
-			return;
-	_waves.push_back(number);
+	return getAmplitude(t - x/_c) * cos(2 * M_PI*_f * (x / _c - t) - M_PI / 2.0) * exp(-x / l);
 }

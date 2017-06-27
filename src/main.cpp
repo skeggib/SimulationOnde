@@ -180,7 +180,7 @@ int main(int argc, char* args[])
         SDL_Event event;
 
         // Camera position
-		Vector3 origin(10, 10, 10);
+		Vector3 origin(5, 5, 5);
         Camera camera(origin);
         camera.rotateH(-45);
         camera.rotateV(35);
@@ -192,12 +192,14 @@ int main(int argc, char* args[])
 
         WaterMesh mesh(Vector3(0, 0, 0), 5, 100);
 
-		double a = 0.2;
+		double a = 0.7;
+		double coefAttAmplitude = 0.6;
 		double f = 1;
 		double c = 0.72;
 		std::vector<int> numbers = { };
 
-		mesh.addWave(new Wave(a, f, c, Vector2(0, 0), 0, numbers));
+		mesh.addWave(new Wave(a, coefAttAmplitude, f, c, Vector2(0, 0), 0));
+		mesh.addWave(new Wave(a, coefAttAmplitude, f, c, Vector2(1, 1), 0.5));
 
         world.add(&mesh);
 
@@ -325,11 +327,11 @@ int main(int argc, char* args[])
 				splitsMean = 0;
 			}
 
-			double time = updateDuration.count() + renderDuration.count();
+			/*double time = updateDuration.count() + renderDuration.count();
 			if (time > 33)
 				mesh.setSplits(mesh.getSplits() * 0.9);
 			else if (time < 30)
-				mesh.setSplits(mesh.getSplits() * 1.1);
+				mesh.setSplits(mesh.getSplits() * 1.1);*/
         }
     }
 
