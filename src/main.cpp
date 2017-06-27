@@ -1,3 +1,6 @@
+#define M_PI		3.14159265358979323846
+#define M_PI_2		1.57079632679489661923
+
 // Using SDL, SDL OpenGL and standard IO
 #include <iostream>
 #include <cmath>
@@ -15,6 +18,8 @@
 #include "Camera.h"
 #include "World.h"
 #include "WaterMesh.h"
+
+#include "Slider.h"
 
 /***************************************************************************/
 /* Constants and functions declarations                                    */
@@ -155,6 +160,7 @@ int main(int argc, char* args[])
 {
     // The window we'll be rendering to
     SDL_Window* gWindow = NULL;
+    SDL_Window* hud = NULL;
 
     // OpenGL context
     SDL_GLContext gContext;
@@ -167,8 +173,19 @@ int main(int argc, char* args[])
     }
     else
     {
+
+        hud = SDL_CreateWindow(
+            "HUD",                  // window title
+            SDL_WINDOWPOS_UNDEFINED,           // initial x position
+            SDL_WINDOWPOS_UNDEFINED,           // initial y position
+            400,                               // width, in pixels
+            600,                               // height, in pixels
+            SDL_WINDOW_SHOWN);
+
+        SDL_Renderer* hudRenderer  = SDL_CreateRenderer( hud, -1, SDL_RENDERER_ACCELERATED );
+        SDL_SetRenderDrawColor( hudRenderer , 0, 0, 0, 0 );
         // Hide cursor
-        SDL_ShowCursor(SDL_DISABLE);
+//        SDL_ShowCursor(SDL_DISABLE);
 
         // Main loop flag
         bool quit = false;
@@ -223,6 +240,14 @@ int main(int argc, char* args[])
 		double fpsElapsedTime = 0;
 		double fpsPreviousTime = 0;
 
+		// Drag'n'drop
+		bool drag = false;
+		int x_beg = 0;
+		int y_beg = 0;
+
+		// Slider
+		Slider slider(0, 10, 5, {50,50,400-100,4}, {400/2 - 20/2, 40 - 10, 20, 40});
+
         Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
         {
@@ -234,13 +259,29 @@ int main(int argc, char* args[])
                 case SDL_QUIT:
                     quit = true;
                     break;
+                case SDL_MOUSEBUTTONDOWN: // On commence le drag'n'drop
+                    if(SDL_GetMouseFocus() == gWindow)
+                    {
+                        SDL_GetMouseState( &mouse_dx, &mouse_dy );
+                        // CHECK IF CLICK IS IN OPENGL PART OF WINDOW
+                        drag = true;
+                        x_beg = mouse_dx;
+                        y_beg = mouse_dy;
+                    }
+                    break;
+                case SDL_MOUSEBUTTONUP: // On relache le drag'n'drop
+                    drag = false;
+                    break;
                 case SDL_MOUSEMOTION:
-                    SDL_GetMouseState( &mouse_dx, &mouse_dy );
-                    mouse_dx -= SCREEN_WIDTH / 2;
-                    mouse_dy -= SCREEN_HEIGHT / 2;
-                    SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-                    camera.rotateH((double)mouse_dx / 3.0);
-                    camera.rotateV((double)mouse_dy / 3.0);
+                    if(drag)
+                    {
+                        SDL_GetMouseState( &mouse_dx, &mouse_dy );
+//                        SDL_WarpMouseInWindow(gWindow, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+                        camera.rotateH((double)(mouse_dx - x_beg) / SPEED/2);
+                        camera.rotateV((double)(mouse_dy - y_beg) / SPEED/2);
+                        x_beg = mouse_dx;
+                        y_beg = mouse_dy;
+                    }
                     break;
                 default:
                     break;
@@ -312,11 +353,30 @@ int main(int argc, char* args[])
 
             // Update window screen
             SDL_GL_SwapWindow(gWindow);
+
+
+            // HUD WINDOW
+            SDL_SetRenderDrawColor(hudRenderer, 0,0,0,255);
+            SDL_RenderClear( hudRenderer );
+
+//            SDL_Rect bar = {50,50,400-100,4};
+//            SDL_Rect cursor = {400/2 - 20/2, 40 - 10, 20, 40};
+
+            SDL_Rect bar = slider.getDestBar();
+            SDL_Rect cur = slider.getDestCur();
+            SDL_SetRenderDrawColor(hudRenderer, 255,255,255,255);
+            SDL_RenderFillRect(hudRenderer, &bar);
+
+            SDL_SetRenderDrawColor(hudRenderer, 100,100,100,255);
+            SDL_RenderFillRect(hudRenderer, &cur);
+
+            SDL_RenderPresent( hudRenderer );
         }
     }
 
     // Free resources and close SDL
     close(&gWindow);
+    SDL_DestroyWindow(hud);
 
     return 0;
 }

@@ -24,6 +24,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-std=c++11" />
 					<Add directory="include" />
 				</Compiler>
 				<Linker>
@@ -50,6 +51,7 @@
 		<Unit filename="include/Camera.h" />
 		<Unit filename="include/Color.h" />
 		<Unit filename="include/Form.h" />
+		<Unit filename="include/Slider.h" />
 		<Unit filename="include/Square.h" />
 		<Unit filename="include/Triangle.h" />
 		<Unit filename="include/Vector2.h" />
@@ -61,6 +63,7 @@
 		<Unit filename="src/Camera.cpp" />
 		<Unit filename="src/Color.cpp" />
 		<Unit filename="src/Form.cpp" />
+		<Unit filename="src/Slider.cpp" />
 		<Unit filename="src/Square.cpp" />
 		<Unit filename="src/Triangle.cpp" />
 		<Unit filename="src/Vector2.cpp" />

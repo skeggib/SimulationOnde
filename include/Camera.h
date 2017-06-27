@@ -1,7 +1,10 @@
 #pragma once
+#define M_PI		3.14159265358979323846
+#define M_PI_2		1.57079632679489661923
 
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <math.h>
 
 #include "Vector3.h"
 
@@ -28,5 +31,4 @@ public:
     void rotateH(double angle);
     void rotateV(double angle);
     void move(double forward, double left, double up);
-    void reset(void);
 };
