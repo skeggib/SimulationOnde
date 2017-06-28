@@ -346,19 +346,19 @@ int main(int argc, char* args[])
 			}
 			if (statEv[SDL_SCANCODE_A])
 			{
-				camera.move(0, 1, 0);
+				camera.move(0, -1, 0);
 			}
 			if (statEv[SDL_SCANCODE_D])
 			{
-				camera.move(0, -1, 0);
+				camera.move(0, 1, 0);
 			}
 			if (statEv[SDL_SCANCODE_W])
 			{
-				camera.move(1, 0, 0);
+				camera.move(-1, 0, 0);
 			}
 			if (statEv[SDL_SCANCODE_S])
 			{
-				camera.move(-1, 0, 0);
+				camera.move(1, 0, 0);
 			}
 			if (statEv[SDL_SCANCODE_SPACE])
 			{
