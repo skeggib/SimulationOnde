@@ -180,7 +180,7 @@ int main(int argc, char* args[])
         SDL_Event event;
 
         // Camera position
-		Vector3 origin(10, 10, 10);
+		Vector3 origin(5, 5, 5);
         Camera camera(origin);
         camera.rotateH(-45);
         camera.rotateV(35);
@@ -240,8 +240,8 @@ int main(int argc, char* args[])
                     break;
                 }
             }
-			
-			std::chrono::time_point<std::chrono::steady_clock> startUpdateTime = std::chrono::high_resolution_clock::now();
+
+			std::chrono::_V2::system_clock::time_point startUpdateTime = std::chrono::high_resolution_clock::now();
 
             // Update the scene
             current_time = SDL_GetTicks(); // get the elapsed time from SDL initialization (ms)
@@ -252,7 +252,7 @@ int main(int argc, char* args[])
                 world.update(1e-3 * elapsed_time); // International system units : seconds
             }
 
-			std::chrono::time_point<std::chrono::steady_clock> endUpdateTime = std::chrono::high_resolution_clock::now();
+			std::chrono::_V2::system_clock::time_point endUpdateTime = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double, std::milli> updateDuration = endUpdateTime - startUpdateTime;
 			updateMeanMs += updateDuration.count();
 
@@ -295,12 +295,12 @@ int main(int argc, char* args[])
 				camera.setPosition(origin);
 			}
 
-			std::chrono::time_point<std::chrono::steady_clock> startRenderTime = std::chrono::high_resolution_clock::now();
+			std::chrono::_V2::system_clock::time_point startRenderTime = std::chrono::high_resolution_clock::now();
 
             // Render the scene
             world.render(camera);
 
-			std::chrono::time_point<std::chrono::steady_clock> endRenderTime = std::chrono::high_resolution_clock::now();
+			std::chrono::_V2::system_clock::time_point endRenderTime = std::chrono::high_resolution_clock::now();
 			std::chrono::duration<double, std::milli> renderDuration = endRenderTime - startRenderTime;
 			renderMeanMs += renderDuration.count();
 
