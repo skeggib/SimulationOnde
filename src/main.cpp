@@ -273,7 +273,8 @@ int main(int argc, char* args[])
         Button jeter("Jeter caillou", SDL_Rect{HUD_WIDTH / 2 - 75,300 + 150, 150,TEXT_HEIGHT});
 
 		// Slider
-		Slider slider("Fréquence", 0.5, 2.5, 1.315, 50, 50);
+		Slider amplitudeSlider("Amplitude", 0.1, 2.0, a, 50, 70);
+		Slider frequencySlider("Fréquence", 0.1, 2.0, f, 50, 190);
 
         Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
@@ -318,7 +319,11 @@ int main(int argc, char* args[])
                     else if(drag_hud && SDL_GetMouseFocus() == hud)
                     {
                         SDL_GetMouseState( &mouse_dx, &mouse_dy );
-                        slider.move(mouse_dx, mouse_dy);
+						amplitudeSlider.move(mouse_dx, mouse_dy);
+                        frequencySlider.move(mouse_dx, mouse_dy);
+
+						a = amplitudeSlider.getValue();
+						f = frequencySlider.getValue();
                     }
                     break;
                 default:
@@ -435,7 +440,8 @@ int main(int argc, char* args[])
 //            SDL_Rect cursor = {400/2 - 20/2, 40 - 10, 20, 40};
 
             SDL_GetMouseState(&mouse_dx, &mouse_dy);
-            slider.draw(hudRenderer, font, color);
+			amplitudeSlider.draw(hudRenderer, font, color);
+            frequencySlider.draw(hudRenderer, font, color);
             petit.draw(hudRenderer, font, event);
             gros.draw(hudRenderer, font, event);
             jeter.draw(hudRenderer, font, event);
