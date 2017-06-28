@@ -342,11 +342,11 @@ int main(int argc, char* args[])
 				splitsMean = 0;
 			}
 
-			/*double time = updateDuration.count() + renderDuration.count();
+			double time = updateDuration.count() + renderDuration.count();
 			if (time > 33)
 				mesh.setSplits(mesh.getSplits() * 0.9);
 			else if (time < 30)
-				mesh.setSplits(mesh.getSplits() * 1.1);*/
+				mesh.setSplits(mesh.getSplits() * 1.1);
         }
     }
 
