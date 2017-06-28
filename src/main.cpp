@@ -239,6 +239,7 @@ int main(int argc, char* args[])
 
         WaterMesh mesh(Vector3(0, 0, 0), 5, 100);
 		mesh.addWall(new Wall(Vector2(-2, 2.5), Vector2(0, -2.5), -0.3, 0.3));
+		mesh.addWall(new Wall(Vector2(2, 2.5), Vector2(0, -2.5), -0.3, 0.3));
 
         world.add(&mesh);
 
@@ -412,7 +413,8 @@ int main(int argc, char* args[])
 				std::cout << "FPS: " << fps << std::endl
 					<< "\tupdate: " << updateMeanMs / (double)fps << " ms" << std::endl
 					<< "\trender: " << renderMeanMs / (double)fps << " ms" << std::endl
-					<< "\tsplits: " << splitsMean / (double) fps << std::endl;
+					<< "\tsplits: " << splitsMean / (double) fps << std::endl
+					<< "\twaves: " << mesh.countWaves() << std::endl;
 				fps = 0;
 				updateMeanMs = 0;
 				renderMeanMs = 0;
@@ -421,9 +423,9 @@ int main(int argc, char* args[])
 
 			double time = updateDuration.count() + renderDuration.count();
 			if (time > 33)
-				mesh.setSplits(mesh.getSplits() * 0.9);
+				mesh.setSplits((int)(mesh.getSplits() * 0.9));
 			else if (time < 30)
-				mesh.setSplits(mesh.getSplits() * 1.1);
+				mesh.setSplits((int)(mesh.getSplits() * 1.1));
 
             // HUD WINDOW
             SDL_SetRenderDrawColor(hudRenderer, 0,0,0,255);

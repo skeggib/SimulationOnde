@@ -7,7 +7,9 @@ Wave::Wave(double a, double coefAttAmplitude, double f, double c, Vector2 source
     _c(c),
 	_source(source),
 	_isSource(true),
-	_phaseChange(phaseChange)
+	_phaseChange(phaseChange),
+	_causeWave(NULL),
+	_causeWall(NULL)
 {
 
 }
@@ -30,6 +32,26 @@ void Wave::setIsSource(bool isSource)
 bool Wave::isSource()
 {
 	return _isSource;
+}
+
+void Wave::setCauseWave(Wave * wave)
+{
+	_causeWave = wave;
+}
+
+Wave * Wave::getCauseWave()
+{
+	return _causeWave;
+}
+
+void Wave::setCauseWall(Wall * wall)
+{
+	_causeWall = wall;
+}
+
+Wall * Wave::getCauseWall()
+{
+	return _causeWall;
 }
 
 void Wave::setPhaseChange(double t)
@@ -59,7 +81,7 @@ double Wave::getIntensity(Vector2 p, double t)
     double x = dist.norm();
 	double l = _c / _f;
 
-	return getAmplitude(t - x/_c) * cos(2 * M_PI*_f * (x / _c - t + _phaseChange) - M_PI / 2.0) * exp(-x / l);
+	return getAmplitude(t - x / _c) * cos(2 * M_PI*_f * (x / _c - t + _phaseChange) - M_PI / 2.0) *exp(-x / l);
 }
 
 double Wave::getAmplitude(double t)

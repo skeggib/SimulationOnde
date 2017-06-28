@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "Vector2.h"
+#include "Wall.h"
 
 class Wave
 {
@@ -24,6 +25,9 @@ private:
     Vector2 _source;
 	bool _isSource;
 
+	Wave* _causeWave;
+	Wall* _causeWall;
+
 public:
 
 	Wave(double a = 1, double coefAttAmplitude = 0.3, double f = 1, double c = 1, Vector2 source = Vector2(), double phaseChange = 0);
@@ -33,6 +37,12 @@ public:
 
 	void setIsSource(bool isSource);
 	bool isSource();
+
+	void setCauseWave(Wave* wave);
+	Wave* getCauseWave();
+
+	void setCauseWall(Wall* wall);
+	Wall* getCauseWall();
 
 	void setPhaseChange(double t);
 

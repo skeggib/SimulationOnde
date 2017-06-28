@@ -95,7 +95,7 @@ double Slider::getValue(void)
 
 void Slider::setValue(double pos)
 {
-    _destCur.x = (pos - _min)/(_max - _min) * _destBar.w;
+    _destCur.x = (int)((pos - _min)/(_max - _min) * _destBar.w);
 
     _destCur.x += _destBar.x;
 //    std::cout << "> CUR : " << _destCur.x << " = " << getPos() << std::endl;
@@ -123,7 +123,7 @@ void Slider::setDestCur(SDL_Rect dest)
 
 void Slider::draw(SDL_Renderer *renderer, TTF_Font *font, SDL_Color col)
 {
-    write(_name + " : " + doubleToString(getValue()), font, col, renderer, SDL_Rect{_destBar.x, _destBar.y - TEXT_HEIGHT*2.5, _destBar.w, TEXT_HEIGHT});
+    write(_name + " : " + doubleToString(getValue()), font, col, renderer, SDL_Rect{_destBar.x, _destBar.y - static_cast<int>(TEXT_HEIGHT*2.5), _destBar.w, TEXT_HEIGHT});
 
     SDL_SetRenderDrawColor(renderer, 255,255,255,255);
     SDL_RenderFillRect(renderer, &_destBar);

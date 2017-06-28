@@ -56,12 +56,11 @@ void WaterMesh::render()
 			angle = - (scalar * sun) / (scalar.norm() * sun_norm);
 			color = angle * (MaxColor - MinColor) + MinColor;
 
-			glColor3f(0, 0.1, color);
+			glColor3d(0, 0.1, color);
 			glVertex3d(x1, y1, i1);
 			glVertex3d(x1, y2, i3);
 			glVertex3d(x2, y1, i2);
 
-			glColor3f(0, 0.1, color);
 			glVertex3d(x1, y2, i3);
 			glVertex3d(x2, y1, i2);
 			glVertex3d(x2, y2, i4);
@@ -70,7 +69,7 @@ void WaterMesh::render()
 
 	glEnd();
 
-	for (int i = 0; i < _walls.size(); i++)
+	for (unsigned int i = 0; i < _walls.size(); i++)
 		if (_walls[i] != NULL)
 			_walls[i]->render();
 
@@ -101,19 +100,34 @@ void WaterMesh::update(double delta_t)
             y2 *= _size / _splits;
 
             double intensity = 0;
-			for (int i = 0; i < _waves.size(); i++)
+			for (unsigned int i = 0; i < _waves.size(); i++)
 			{
 				if (_waves[i] != NULL)
 				{
 					bool compute = false;
 					bool isSource = _waves[i]->isSource();
 
-					bool sameSide = _walls[0]->sameSide(Vector2(x2, y2), _waves[i]->getSource());
-					if ((isSource && sameSide) || (!isSource && !sameSide))
+					Vector2 source;
+
+					if (isSource)
+					{
+						source = _waves[i]->getSource();
+					}
+					else
+					{
+						source = _waves[i]->getCauseWave()->getSource();
+					}
+
+					compute = true;
+					for (unsigned int j = 0; j < _walls.size(); j++)
+						if (!_walls[j]->sameSide(Vector2(x2, y2), source))
+							compute = false;
+					
+					if (compute)
 						intensity += _waves[i]->getIntensity(Vector2(x2, y2), _elapsedTime);
 				}
 			}
-            
+
 			setIntensity(x, y, intensity);
         }
     }
@@ -121,7 +135,7 @@ void WaterMesh::update(double delta_t)
 
 void WaterMesh::addWall(Wall * wall)
 {
-	for (int i = 0; i < _walls.size(); i++)
+	for (unsigned int i = 0; i < _walls.size(); i++)
 		if (_walls[i] == wall)
 			return;
 	_walls.push_back(wall);
@@ -129,18 +143,22 @@ void WaterMesh::addWall(Wall * wall)
 
 void WaterMesh::addWave(Wave * wave)
 {
-	for (int i = 0; i < _waves.size(); i++)
+	for (unsigned int i = 0; i < _waves.size(); i++)
 		if (_waves[i] == wave)
 			return;
 	wave->setPhaseChange(_elapsedTime);
 	_waves.push_back(wave);
 
-	Vector2 symmetry = _walls[0]->getSymmetry(wave->getSource());
-	
-	Wave* reflection = new Wave(*wave);
-	reflection->setSource(symmetry);
-	reflection->setIsSource(false);
-	_waves.push_back(reflection);
+	for (unsigned int i = 0; i < _walls.size(); i++)
+	{
+		Vector2 symmetry = _walls[i]->getSymmetry(wave->getSource());
+		Wave* reflection = new Wave(*wave);
+		reflection->setSource(symmetry);
+		reflection->setIsSource(false);
+		reflection->setCauseWave(wave);
+		reflection->setCauseWall(_walls[i]);
+		_waves.push_back(reflection);
+	}
 }
 
 void WaterMesh::setIntensity(int x, int y, double intensity)
@@ -160,4 +178,9 @@ void WaterMesh::setSplits(int splits)
 int WaterMesh::getSplits()
 {
 	return _splits;
+}
+
+int WaterMesh::countWaves()
+{
+	return _waves.size();
 }

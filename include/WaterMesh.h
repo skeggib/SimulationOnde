@@ -35,4 +35,6 @@ public:
 
 	void setSplits(int splits);
 	int getSplits();
+
+	int countWaves();
 };

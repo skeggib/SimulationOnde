@@ -25,7 +25,7 @@ void Triangle::render()
 
     //glBegin(GL_TRIANGLES);
     //{
-        glColor3f(0,0.1,color);
+        glColor3d(0,0.1,color);
         glVertex3d(_origin.x, _origin.y, _origin.z);
         glVertex3d(_origin.x + _v1.x, _origin.y + _v1.y, _origin.z + _v1.z);
         glVertex3d(_origin.x + _v2.x, _origin.y + _v2.y, _origin.z + _v2.z);
