@@ -22,12 +22,18 @@ private:
 	double _phaseChange;
 
     Vector2 _source;
+	bool _isSource;
 
 public:
 
 	Wave(double a = 1, double coefAttAmplitude = 0.3, double f = 1, double c = 1, Vector2 source = Vector2(), double phaseChange = 0);
 
 	void setSource(Vector2 source);
+	Vector2 getSource();
+
+	void setIsSource(bool isSource);
+	bool isSource();
+
 	void setPhaseChange(double t);
 
 	double getAmplitude(double t);

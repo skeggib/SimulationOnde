@@ -6,6 +6,7 @@ Wave::Wave(double a, double coefAttAmplitude, double f, double c, Vector2 source
     _f(f),
     _c(c),
 	_source(source),
+	_isSource(true),
 	_phaseChange(phaseChange)
 {
 
@@ -14,6 +15,21 @@ Wave::Wave(double a, double coefAttAmplitude, double f, double c, Vector2 source
 void Wave::setSource(Vector2 source)
 {
 	_source = source;
+}
+
+Vector2 Wave::getSource()
+{
+	return _source;
+}
+
+void Wave::setIsSource(bool isSource)
+{
+	_isSource = isSource;
+}
+
+bool Wave::isSource()
+{
+	return _isSource;
 }
 
 void Wave::setPhaseChange(double t)

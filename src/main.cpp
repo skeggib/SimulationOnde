@@ -219,7 +219,7 @@ int main(int argc, char* args[])
 		World world;
 
         WaterMesh mesh(Vector3(0, 0, 0), 5, 100);
-		mesh.addWall(new Wall(Vector2(-2.5, -2.5), Vector2(2.5, -2.5), -0.3, 0.3));
+		mesh.addWall(new Wall(Vector2(-2, 2.5), Vector2(0, -2.5), -0.3, 0.3));
 
         world.add(&mesh);
 

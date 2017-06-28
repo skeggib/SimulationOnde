@@ -102,8 +102,17 @@ void WaterMesh::update(double delta_t)
 
             double intensity = 0;
 			for (int i = 0; i < _waves.size(); i++)
+			{
 				if (_waves[i] != NULL)
-					intensity += _waves[i]->getIntensity(Vector2(x2, y2), _elapsedTime);
+				{
+					bool compute = false;
+					bool isSource = _waves[i]->isSource();
+
+					bool sameSide = _walls[0]->sameSide(Vector2(x2, y2), _waves[i]->getSource());
+					if ((isSource && sameSide) || (!isSource && !sameSide))
+						intensity += _waves[i]->getIntensity(Vector2(x2, y2), _elapsedTime);
+				}
+			}
             
 			setIntensity(x, y, intensity);
         }
@@ -125,6 +134,13 @@ void WaterMesh::addWave(Wave * wave)
 			return;
 	wave->setPhaseChange(_elapsedTime);
 	_waves.push_back(wave);
+
+	Vector2 symmetry = _walls[0]->getSymmetry(wave->getSource());
+	
+	Wave* reflection = new Wave(*wave);
+	reflection->setSource(symmetry);
+	reflection->setIsSource(false);
+	_waves.push_back(reflection);
 }
 
 void WaterMesh::setIntensity(int x, int y, double intensity)
