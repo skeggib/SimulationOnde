@@ -70,6 +70,10 @@ void WaterMesh::render()
 
 	glEnd();
 
+	for (int i = 0; i < _walls.size(); i++)
+		if (_walls[i] != NULL)
+			_walls[i]->render();
+
     Form::endRendering();
 }
 
@@ -104,6 +108,14 @@ void WaterMesh::update(double delta_t)
 			setIntensity(x, y, intensity);
         }
     }
+}
+
+void WaterMesh::addWall(Wall * wall)
+{
+	for (int i = 0; i < _walls.size(); i++)
+		if (_walls[i] == wall)
+			return;
+	_walls.push_back(wall);
 }
 
 void WaterMesh::addWave(Wave * wave)

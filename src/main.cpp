@@ -194,15 +194,15 @@ int main(int argc, char* args[])
         double phi = camera.getPhi();
         double theta = camera.getTheta();
 
-		World world;
-
-        WaterMesh mesh(Vector3(0, 0, 0), 5, 100);
-
 		double a = 0.5;
 		double coefAttAmplitude = 0.6;
 		double f = 1.3;
 		double c = 0.72;
-		std::vector<int> numbers = { };
+
+		World world;
+
+        WaterMesh mesh(Vector3(0, 0, 0), 5, 100);
+		mesh.addWall(new Wall(Vector2(-2.5, -2.5), Vector2(2.5, -2.5), -0.3, 0.3));
 
         world.add(&mesh);
 
@@ -342,11 +342,11 @@ int main(int argc, char* args[])
 				splitsMean = 0;
 			}
 
-			/*double time = updateDuration.count() + renderDuration.count();
+			double time = updateDuration.count() + renderDuration.count();
 			if (time > 33)
 				mesh.setSplits(mesh.getSplits() * 0.9);
 			else if (time < 30)
-				mesh.setSplits(mesh.getSplits() * 1.1);*/
+				mesh.setSplits(mesh.getSplits() * 1.1);
         }
     }
 

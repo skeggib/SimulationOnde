@@ -4,6 +4,7 @@
 
 #include "Form.h"
 #include "Wave.h"
+#include "Wall.h"
 
 class WaterMesh : public Form
 {
@@ -14,6 +15,7 @@ private:
     int _splits;
     double _elapsedTime;
 
+	std::vector<Wall*> _walls;
 	std::vector<Wave*> _waves;
 
     void setIntensity(int x, int y, double intensity);
@@ -28,6 +30,7 @@ public:
     void render();
     void update(double delta_t);
 
+	void addWall(Wall* wall);
 	void addWave(Wave* wave);
 
 	void setSplits(int splits);

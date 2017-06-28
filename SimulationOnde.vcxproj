@@ -144,6 +144,7 @@
     <ClCompile Include="src\Triangle.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
     <ClCompile Include="src\Vector2.cpp" />
+    <ClCompile Include="src\Wall.cpp" />
     <ClCompile Include="src\WaterMesh.cpp" />
     <ClCompile Include="src\Wave.cpp" />
     <ClCompile Include="src\World.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="include\Triangle.h" />
     <ClInclude Include="include\Vector3.h" />
     <ClInclude Include="include\Vector2.h" />
+    <ClInclude Include="include\Wall.h" />
     <ClInclude Include="include\WaterMesh.h" />
     <ClInclude Include="include\Wave.h" />
     <ClInclude Include="include\World.h" />
