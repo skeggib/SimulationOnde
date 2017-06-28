@@ -27,6 +27,8 @@
     #define TIME_POINT std::chrono::time_point<std::chrono::steady_clock>
 #endif
 
+#include "Slider.h"
+
 /***************************************************************************/
 /* Constants and functions declarations                                    */
 /***************************************************************************/

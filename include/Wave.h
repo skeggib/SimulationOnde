@@ -1,11 +1,13 @@
 #pragma once
 
+#define M_PI		3.14159265358979323846
+#define M_PI_2		1.57079632679489661923
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <vector>
 
 #include "Vector2.h"
-#include "Cosinus.h"
 
 class Wave
 {
@@ -20,8 +22,6 @@ private:
 	double _phaseChange;
 
     Vector2 _source;
-
-	static const Cosinus cosinus;
 
 public:
 
