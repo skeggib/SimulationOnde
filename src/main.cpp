@@ -6,7 +6,7 @@
 
 #define SDL_MAIN_HANDLED
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <GL/gl.h>
 #include <GL/GLU.h>
 
@@ -177,7 +177,7 @@ int main(int argc, char* args[])
 
         World world;
 
-        Wave wave(0.5, 0.3, 0.3);
+        Wave wave(0.3, 1.3, 0.7);
         WaterMesh mesh(Point(0, 0, 0), 5, 100, wave);
         world.add(&mesh);
 
