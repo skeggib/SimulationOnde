@@ -140,6 +140,7 @@
     <ClCompile Include="src\Cosinus.cpp" />
     <ClCompile Include="src\Form.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Slider.cpp" />
     <ClCompile Include="src\Square.cpp" />
     <ClCompile Include="src\Triangle.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="include\Color.h" />
     <ClInclude Include="include\Cosinus.h" />
     <ClInclude Include="include\Form.h" />
+    <ClInclude Include="include\Slider.h" />
     <ClInclude Include="include\Square.h" />
     <ClInclude Include="include\Triangle.h" />
     <ClInclude Include="include\Vector3.h" />
