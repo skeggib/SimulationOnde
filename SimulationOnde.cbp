@@ -46,9 +46,11 @@
 			<Add library="SDL2_image" />
 			<Add library="opengl32" />
 			<Add library="glu32" />
+			<Add library="lib/SDL2_ttf.lib" />
 			<Add directory="./lib" />
 		</Linker>
 		<Unit filename="include/Animation.h" />
+		<Unit filename="include/Button.h" />
 		<Unit filename="include/Camera.h" />
 		<Unit filename="include/Color.h" />
 		<Unit filename="include/Form.h" />
@@ -61,7 +63,9 @@
 		<Unit filename="include/WaterMesh.h" />
 		<Unit filename="include/Wave.h" />
 		<Unit filename="include/World.h" />
+		<Unit filename="include/ttf.h" />
 		<Unit filename="src/Animation.cpp" />
+		<Unit filename="src/Button.cpp" />
 		<Unit filename="src/Camera.cpp" />
 		<Unit filename="src/Color.cpp" />
 		<Unit filename="src/Cosinus.cpp" />
@@ -76,6 +80,7 @@
 		<Unit filename="src/Wave.cpp" />
 		<Unit filename="src/World.cpp" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/ttf.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
