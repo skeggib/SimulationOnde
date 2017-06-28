@@ -10,16 +10,20 @@
 
 #define SDL_MAIN_HANDLED
 
-#define SPEED 0.3
+#define SPEED 1.2
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <GL/gl.h>
 #include <GL/GLU.h>
+
+#include "ttf.h"
 
 #include "Camera.h"
 #include "World.h"
 #include "WaterMesh.h"
 #include "Slider.h"
+#include "Button.h"
 
 #ifdef _MinGW
     #define TIME_POINT std::chrono::_V2::system_clock::time_point
@@ -33,8 +37,15 @@
 /* Constants and functions declarations                                    */
 /***************************************************************************/
 // Screen dimension constants
-const int SCREEN_WIDTH = 1000;
-const int SCREEN_HEIGHT = 700;
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
+const int SCREEN_X = 64;
+const int SCREEN_Y = 64;
+
+const int HUD_WIDTH = 400;
+const int HUD_HEIGHT = 600;
+const int HUD_X = SCREEN_X + SCREEN_WIDTH;
+const int HUD_Y = SCREEN_Y;
 
 // Max number of forms : static allocation
 const int MAX_FORMS_NUMBER = 10;
@@ -69,6 +80,11 @@ bool init(SDL_Window** window, SDL_GLContext* context)
     }
     else
     {
+        if(TTF_Init() == -1)
+        {
+            std::cerr << "ERROR Init SDL_TTF : " << TTF_GetError() << std::endl;
+            exit(EXIT_FAILURE);
+        }
         // Use OpenGL 2.1
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
@@ -77,7 +93,7 @@ bool init(SDL_Window** window, SDL_GLContext* context)
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
 
         // Create window
-        *window = SDL_CreateWindow( "Simulation d'onde", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
+        *window = SDL_CreateWindow( "Simulation d'onde", SCREEN_X, SCREEN_Y, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
         if( *window == NULL )
         {
             std::cout << "Window could not be created! SDL Error: " << SDL_GetError() << std::endl;
@@ -186,14 +202,17 @@ int main(int argc, char* args[])
     {
         hud = SDL_CreateWindow(
             "HUD",                  // window title
-            SDL_WINDOWPOS_UNDEFINED,           // initial x position
-            SDL_WINDOWPOS_UNDEFINED,           // initial y position
-            400,                               // width, in pixels
-            600,                               // height, in pixels
+            HUD_X,           // initial x position
+            HUD_Y,           // initial y position
+            HUD_WIDTH,                               // width, in pixels
+            HUD_HEIGHT,                               // height, in pixels
             SDL_WINDOW_SHOWN);
 
         SDL_Renderer* hudRenderer  = SDL_CreateRenderer( hud, -1, SDL_RENDERER_ACCELERATED );
         SDL_SetRenderDrawColor( hudRenderer , 0, 0, 0, 0 );
+
+        TTF_Font *font = loadFont("rc/font.TTF", TEXT_HEIGHT);
+        SDL_Color color = {255,255,255, 255};
 
         // Main loop flag
         bool quit = false;
@@ -247,8 +266,13 @@ int main(int argc, char* args[])
 		int x_beg = 0;
 		int y_beg = 0;
 
+        // Button
+        Button petit("Petit caillou", SDL_Rect{25,300, 150,TEXT_HEIGHT});
+        Button gros("Gros caillou", SDL_Rect{HUD_WIDTH-25-150,300, 150,TEXT_HEIGHT});
+        Button jeter("Jeter caillou", SDL_Rect{HUD_WIDTH / 2 - 75,300 + 150, 150,TEXT_HEIGHT});
+
 		// Slider
-		Slider slider(2, 4, 3, {50,50,300,4}, {0,0, 20, 40});
+		Slider slider("Fréquence", 0.5, 2.5, 1.315, 50, 50);
 
         Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
@@ -272,6 +296,7 @@ int main(int argc, char* args[])
                     }
                     else if(SDL_GetMouseFocus() == hud)
                     {
+                        SDL_GetMouseState( &mouse_dx, &mouse_dy );
                         drag_hud = true;
                     }
                     break;
@@ -293,7 +318,6 @@ int main(int argc, char* args[])
                     {
                         SDL_GetMouseState( &mouse_dx, &mouse_dy );
                         slider.move(mouse_dx, mouse_dy);
-                        std::cout << "> VALUE : " << slider.getValue() << std::endl;
                     }
                     break;
                 default:
@@ -322,19 +346,19 @@ int main(int argc, char* args[])
 			}
 			if (statEv[SDL_SCANCODE_A])
 			{
-				camera.move(0, -1, 0);
+				camera.move(0, 1, 0);
 			}
 			if (statEv[SDL_SCANCODE_D])
 			{
-				camera.move(0, 1, 0);
+				camera.move(0, -1, 0);
 			}
 			if (statEv[SDL_SCANCODE_W])
 			{
-				camera.move(-1, 0, 0);
+				camera.move(1, 0, 0);
 			}
 			if (statEv[SDL_SCANCODE_S])
 			{
-				camera.move(1, 0, 0);
+				camera.move(-1, 0, 0);
 			}
 			if (statEv[SDL_SCANCODE_SPACE])
 			{
@@ -408,14 +432,21 @@ int main(int argc, char* args[])
 //            SDL_Rect bar = {50,50,400-100,4};
 //            SDL_Rect cursor = {400/2 - 20/2, 40 - 10, 20, 40};
 
-            slider.draw(hudRenderer);
+            SDL_GetMouseState(&mouse_dx, &mouse_dy);
+            slider.draw(hudRenderer, font, color);
+            petit.draw(hudRenderer, font, event);
+            gros.draw(hudRenderer, font, event);
+            jeter.draw(hudRenderer, font, event);
             SDL_RenderPresent( hudRenderer );
         }
+        TTF_CloseFont(font);
     }
 
     // Free resources and close SDL
     close(&gWindow);
     SDL_DestroyWindow(hud);
+
+    TTF_Quit();
 
     return 0;
 }

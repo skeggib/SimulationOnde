@@ -2,6 +2,9 @@
 
 Slider::Slider(void)
 {
+    _x = 0;
+    _y = 0;
+    _name = "Slider";
     _destBar = SDL_Rect{0,0,0,0};
     _destCur = SDL_Rect{0,0,0,0};
     _min = 0;
@@ -10,34 +13,13 @@ Slider::Slider(void)
     resetPos();
 }
 
-Slider::Slider(SDL_Rect destBar, SDL_Rect destCur)
+Slider::Slider(std::string name, double minV, double maxV, double defaultV, int x, int y)
 {
-    _destBar = destBar;
-    _destCur = destCur;
-    _destCur.x = _destBar.x;
-    _destCur.y = _destBar.y + _destBar.h / 2 - _destCur.h / 2;
-    _min = 0;
-    _max = 0;
-    _default = 0;
-    resetPos();
-}
-
-Slider::Slider(double minV, double maxV, double defaultV)
-{
-    _destBar = SDL_Rect{0,0,0,0};
-    _destCur = SDL_Rect{0,0,0,0};
-    _min = minV;
-    _max = maxV;
-    _default = defaultV;
-    resetPos();
-}
-
-Slider::Slider(double minV, double maxV, double defaultV, SDL_Rect destBar, SDL_Rect destCur)
-{
-    _destBar = destBar;
-    _destCur = destCur;
-    _destCur.x = _destBar.x;
-    _destCur.y = _destBar.y + _destBar.h / 2 - _destCur.h / 2;
+    _x = x;
+    _y = y;
+    _name = name;
+    _destBar = SDL_Rect{x, y + TEXT_HEIGHT, BAR_WIDTH, BAR_HEIGHT};
+    _destCur = SDL_Rect{_destBar.x, _destBar.y + _destBar.h / 2 - CUR_HEIGHT / 2, CUR_WIDTH, CUR_HEIGHT};
     _min = minV;
     _max = maxV;
     _default = defaultV;
@@ -139,8 +121,10 @@ void Slider::setDestCur(SDL_Rect dest)
     _destCur = dest;
 }
 
-void Slider::draw(SDL_Renderer *renderer) const
+void Slider::draw(SDL_Renderer *renderer, TTF_Font *font, SDL_Color col)
 {
+    write(_name + " : " + doubleToString(getValue()), font, col, renderer, SDL_Rect{_destBar.x, _destBar.y - TEXT_HEIGHT*2.5, _destBar.w, TEXT_HEIGHT});
+
     SDL_SetRenderDrawColor(renderer, 255,255,255,255);
     SDL_RenderFillRect(renderer, &_destBar);
 

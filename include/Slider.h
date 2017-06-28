@@ -5,13 +5,19 @@
 #include <string>
 #include <iostream>
 
+#include "ttf.h"
+
+#define CUR_WIDTH   20
+#define CUR_HEIGHT  40
+#define BAR_WIDTH   300
+#define BAR_HEIGHT  4
+#define TEXT_HEIGHT 26
+
 class Slider
 {
 public:
     Slider(void);
-    Slider(SDL_Rect destBar, SDL_Rect destCur);
-    Slider(double minV, double maxV, double defaultV);
-    Slider(double minV, double maxV, double defaultV, SDL_Rect destBar, SDL_Rect destCur);
+    Slider(std::string name, double minV, double maxV, double defaultV, int x, int y);
     ~Slider(void);
 
     void move(int x, int y);
@@ -30,9 +36,12 @@ public:
     SDL_Rect getDestCur(void) const;
     void setDestCur(SDL_Rect dest);
 
-    void draw(SDL_Renderer *renderer) const;
+    void draw(SDL_Renderer *renderer, TTF_Font *font, SDL_Color col);
 
 private:
+    int _x;
+    int _y;
+    std::string _name;
     double _min;
     double _max;
     double _default;
