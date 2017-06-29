@@ -267,11 +267,6 @@ int main(int argc, char* args[])
 		int x_beg = 0;
 		int y_beg = 0;
 
-        // Button
-        Button petit("Petit caillou", SDL_Rect{25,300, 150,TEXT_HEIGHT});
-        Button gros("Gros caillou", SDL_Rect{HUD_WIDTH-25-150,300, 150,TEXT_HEIGHT});
-        Button jeter("Jeter caillou", SDL_Rect{HUD_WIDTH / 2 - 75,300 + 150, 150,TEXT_HEIGHT});
-
 		// Slider
 		Slider amplitudeSlider("Amplitude", 0.1, 2.0, a, 50, 70);
 		Slider frequencySlider("Fréquence", 0.1, 2.0, f, 50, 190);
@@ -442,9 +437,6 @@ int main(int argc, char* args[])
             SDL_GetMouseState(&mouse_dx, &mouse_dy);
 			amplitudeSlider.draw(hudRenderer, font, color);
             frequencySlider.draw(hudRenderer, font, color);
-            petit.draw(hudRenderer, font, event);
-            gros.draw(hudRenderer, font, event);
-            jeter.draw(hudRenderer, font, event);
             SDL_RenderPresent( hudRenderer );
         }
         TTF_CloseFont(font);
