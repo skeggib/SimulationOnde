@@ -424,7 +424,7 @@ int main(int argc, char* args[])
 			double time = updateDuration.count() + renderDuration.count();
 			if (time > 33)
 				mesh.setSplits((int)(mesh.getSplits() * 0.9));
-			else if (time < 30)
+			else if (time < 30 && mesh.getSplits() < 400)
 				mesh.setSplits((int)(mesh.getSplits() * 1.1));
 
             // HUD WINDOW
