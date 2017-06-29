@@ -277,7 +277,7 @@ int main(int argc, char* args[])
 
 		//LOGO
 		SDL_Texture *logo = NULL;
-		SDL_Surface *srf_logo = IMG_Load("rc/logo_onde2.png");
+		SDL_Surface *srf_logo = IMG_Load("rc/logo_onde.png");
 		logo = SDL_CreateTextureFromSurface(hudRenderer, srf_logo);
 		SDL_Rect logo_pos = {0, 190 + CUR_HEIGHT, 400, 400};
 
