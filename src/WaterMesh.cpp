@@ -52,11 +52,13 @@ void WaterMesh::render()
 			v2.y = y2 - y1;
 			v2.z = i3 - i1;
 
+			// Calcul de la couleur en fonction de l'orientation du triangle
 			scalar = v1 ^ v2;
 			angle = - (scalar * sun) / (scalar.norm() * sun_norm);
 			color = angle * (MaxColor - MinColor) + MinColor;
 
 			glColor3d(0, 0.1, color);
+
 			glVertex3d(x1, y1, i1);
 			glVertex3d(x1, y2, i3);
 			glVertex3d(x2, y1, i2);
@@ -90,6 +92,8 @@ void WaterMesh::update(double delta_t)
 	}
 
 	double count = _intensities.size();
+
+	// Pour chaque point de discretisation (x,y)
     for (int x = 0; x < count; x++)
     {
         for (int y = 0; y < count; y++)
@@ -99,6 +103,7 @@ void WaterMesh::update(double delta_t)
             x2 *= _size / _splits;
             y2 *= _size / _splits;
 
+            // Calcul de l'intensite (somme de toutes les vagues)
             double intensity = 0;
 			for (unsigned int i = 0; i < _waves.size(); i++)
 			{
@@ -118,11 +123,12 @@ void WaterMesh::update(double delta_t)
 						source = _waves[i]->getCauseWave()->getSource();
 					}
 
+					// Prise en compte des murs pour que les vagues ne les traversent pas
 					compute = true;
 					for (unsigned int j = 0; j < _walls.size(); j++)
 						if (!_walls[j]->sameSide(Vector2(x2, y2), source))
 							compute = false;
-					
+
 					if (compute)
 						intensity += _waves[i]->getIntensity(Vector2(x2, y2), _elapsedTime);
 				}
@@ -143,12 +149,16 @@ void WaterMesh::addWall(Wall * wall)
 
 void WaterMesh::addWave(Wave * wave)
 {
+    // Verifier que la vague n'existe pas dans le tableau
 	for (unsigned int i = 0; i < _waves.size(); i++)
 		if (_waves[i] == wave)
 			return;
+
+    // La vague doit demarrer au moment de l'ajout
 	wave->setPhaseChange(_elapsedTime);
 	_waves.push_back(wave);
 
+	// Ajout des vagues representant les reflexions pour chaque mur
 	for (unsigned int i = 0; i < _walls.size(); i++)
 	{
 		Vector2 symmetry = _walls[i]->getSymmetry(wave->getSource());
