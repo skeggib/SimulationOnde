@@ -13,6 +13,7 @@
 #define SPEED 1.2
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <GL/gl.h>
 #include <GL/GLU.h>
@@ -85,6 +86,7 @@ bool init(SDL_Window** window, SDL_GLContext* context)
             std::cerr << "ERROR Init SDL_TTF : " << TTF_GetError() << std::endl;
             exit(EXIT_FAILURE);
         }
+        IMG_Init(IMG_INIT_PNG);
         // Use OpenGL 2.1
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
@@ -174,6 +176,8 @@ void close(SDL_Window** window)
     //Destroy window
     SDL_DestroyWindow(*window);
     *window = NULL;
+
+    IMG_Quit();
 
     //Quit SDL subsystems
     SDL_Quit();
@@ -270,6 +274,12 @@ int main(int argc, char* args[])
 		// Slider
 		Slider amplitudeSlider("Amplitude", 0.1, 2.0, a, 50, 70);
 		Slider frequencySlider("Fréquence", 0.1, 2.0, f, 50, 190);
+
+		//LOGO
+		SDL_Texture *logo = NULL;
+		SDL_Surface *srf_logo = IMG_Load("rc/logo_onde2.png");
+		logo = SDL_CreateTextureFromSurface(hudRenderer, srf_logo);
+		SDL_Rect logo_pos = {0, 190 + CUR_HEIGHT, 400, 400};
 
         Uint8 const *statEv = SDL_GetKeyboardState(NULL);
         while(!quit)
@@ -437,9 +447,12 @@ int main(int argc, char* args[])
             SDL_GetMouseState(&mouse_dx, &mouse_dy);
 			amplitudeSlider.draw(hudRenderer, font, color);
             frequencySlider.draw(hudRenderer, font, color);
+            SDL_RenderCopy(hudRenderer, logo, NULL, &logo_pos);
             SDL_RenderPresent( hudRenderer );
         }
         TTF_CloseFont(font);
+        SDL_DestroyTexture(logo);
+        SDL_FreeSurface(srf_logo);
     }
 
     // Free resources and close SDL
