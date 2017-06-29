@@ -242,8 +242,8 @@ int main(int argc, char* args[])
 		World world;
 
         WaterMesh mesh(Vector3(0, 0, 0), 5, 100);
-		mesh.addWall(new Wall(Vector2(-2, 2.5), Vector2(0, -2.5), -0.3, 0.3));
-		mesh.addWall(new Wall(Vector2(2, 2.5), Vector2(0, -2.5), -0.3, 0.3));
+		//mesh.addWall(new Wall(Vector2(-2, 2.5), Vector2(0, -2.5), -0.3, 0.3));
+		//mesh.addWall(new Wall(Vector2(2, 2.5), Vector2(0, -2.5), -0.3, 0.3));
 
         world.add(&mesh);
 
@@ -386,6 +386,7 @@ int main(int argc, char* args[])
 				{
 					waveAdded = true;
 					mesh.addWave(new Wave(a, coefAttAmplitude, f, c, Vector2(0, 0)));
+					mesh.addWave(new Wave(a, coefAttAmplitude, f, c, Vector2(0.5, 1)));
 				}
 			}
 			if (!statEv[SDL_SCANCODE_RETURN])
